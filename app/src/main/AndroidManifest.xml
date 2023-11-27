@@ -15,20 +15,86 @@
         android:theme="@style/Theme.Hokari"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ui.activities.SoldProductsDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar"/>
+        <activity
+            android:name=".ui.activities.SoldProductsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.OrderDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.CheckoutActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.EditAddAddressActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.AddressActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.CartListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.ProductDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.AddProductActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.UiComponentsActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+            android:name=".ui.activities.SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
         <activity
-            android:name=".LoginActivity"
-            android:exported="true">
+            android:name=".ui.activities.DashboardActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activities.UserProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.ForgotPasswordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.RegisterActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.LoginActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.CartNShopNoTopBar" />
+        <activity
+            android:name=".ui.activities.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
