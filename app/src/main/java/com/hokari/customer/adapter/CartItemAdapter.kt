@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hokari.customer.R
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.AddressRowBinding
+import com.hokari.customer.databinding.CartItemRowBinding
 import com.hokari.customer.model.Cart
 import com.hokari.customer.ui.activities.CartListActivity
 import com.hokari.customer.utils.LoadGlide
@@ -18,38 +20,41 @@ open class CartItemAdapter(
     private val context: Context,
     private var itemList: ArrayList<Cart>,
     private val updateCartItems: Boolean
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder>() {
 
-    class CartItemViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class CartItemViewHolder(val binding: CartItemRowBinding) : RecyclerView.ViewHolder(binding.root)
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartItemViewHolder {
         return CartItemViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.cart_item_row, parent, false)
+            CartItemRowBinding.inflate(  LayoutInflater.from(context),
+                parent,
+                false)
+
         )
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CartItemViewHolder, position: Int) {
         val model = itemList[position]
-        LoadGlide(context).loadProductImage(model.image, holder.itemView.iv_cart_item_image)
-        holder.itemView.tv_cart_item_price.text = "$${model.price}"
-        holder.itemView.tv_cart_item_title.text = model.title
-        holder.itemView.tv_cart_quantity.text = model.cart_quantity
+        LoadGlide(context).loadProductImage(model.image, holder.binding.ivCartItemImage)
+        holder.binding.tvCartItemPrice.text = "$${model.price}"
+        holder.binding.tvCartItemTitle.text = model.title
+        holder.binding.tvCartQuantity.text = model.cart_quantity
 
         if (model.cart_quantity == "0") {
-            holder.itemView.ib_remove_cart_item.visibility = View.GONE
-            holder.itemView.ib_add_cart_item.visibility = View.GONE
+            holder.binding.ibRemoveCartItem.visibility = View.GONE
+            holder.binding.ibAddCartItem.visibility = View.GONE
 
             if (updateCartItems) {
-                holder.itemView.ib_delete_cart_item.visibility = View.VISIBLE
+                holder.binding.ibDeleteCartItem.visibility = View.VISIBLE
             } else {
-                holder.itemView.ib_delete_cart_item.visibility = View.GONE
+                holder.binding.ibDeleteCartItem.visibility = View.GONE
             }
 
-            holder.itemView.tv_cart_quantity.text =
+            holder.binding.tvCartQuantity.text =
                 context.resources.getString(R.string.lbl_out_of_stock)
 
-            holder.itemView.tv_cart_quantity.setTextColor(
+            holder.binding.tvCartQuantity.setTextColor(
                 ContextCompat.getColor(
                     context,
                     R.color.colorSnackBarError
@@ -58,18 +63,22 @@ open class CartItemAdapter(
         } else {
 
             if (updateCartItems) {
-                holder.itemView.ib_remove_cart_item.visibility = View.VISIBLE
-                holder.itemView.ib_add_cart_item.visibility = View.VISIBLE
-                holder.itemView.ib_delete_cart_item.visibility = View.VISIBLE
+
+                holder.binding.ibRemoveCartItem.visibility = View.VISIBLE
+                holder.binding.ibAddCartItem.visibility = View.VISIBLE
+                holder.binding.ibDeleteCartItem.visibility = View.VISIBLE
             } else {
-                holder.itemView.ib_remove_cart_item.visibility = View.GONE
-                holder.itemView.ib_add_cart_item.visibility = View.GONE
-                holder.itemView.ib_delete_cart_item.visibility = View.GONE
+                holder.binding.apply {
+                    ibRemoveCartItem.visibility = View.GONE
+                    ibAddCartItem.visibility = View.GONE
+                   ibDeleteCartItem.visibility = View.GONE
+                }
+
             }
 
 
 
-            holder.itemView.tv_cart_quantity.setTextColor(
+            holder.binding.tvCartQuantity.setTextColor(
                 ContextCompat.getColor(
                     context,
                     R.color.colorSecondaryText
@@ -77,7 +86,7 @@ open class CartItemAdapter(
             )
         }
 
-        holder.itemView.ib_delete_cart_item.setOnClickListener {
+        holder.binding.ibDeleteCartItem.setOnClickListener {
             when (context) {
                 is CartListActivity -> {
                     context.showProgressBar(context.getString(R.string.please_wait))
@@ -87,7 +96,7 @@ open class CartItemAdapter(
 
         }
 
-        holder.itemView.ib_remove_cart_item.setOnClickListener {
+        holder.binding.ibRemoveCartItem.setOnClickListener {
             if (model.cart_quantity == "1") {
                 Database().removeItemInCart(context, model.id)
             } else {
@@ -101,7 +110,7 @@ open class CartItemAdapter(
             }
         }
 
-        holder.itemView.ib_add_cart_item.setOnClickListener {
+        holder.binding.ibAddCartItem.setOnClickListener {
             val cartQuantity: Int = model.cart_quantity.toInt()
             if (cartQuantity < model.stock_quantity.toInt()) {
                 val itemHashMap = HashMap<String, Any>()
