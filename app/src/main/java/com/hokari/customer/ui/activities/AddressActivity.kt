@@ -9,9 +9,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import com.hokari.customer.R
 import com.hokari.customer.adapter.AddressAdapter
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.ActivityAddressBinding
 import com.hokari.customer.model.Address
 import com.hokari.customer.utils.Constants
 import com.hokari.customer.utils.SwipeToDelete
@@ -21,23 +22,24 @@ import com.hokari.customer.utils.SwipeToEdit
 
 class AddressActivity : UiComponentsActivity() {
 
-
+    private lateinit var binding: ActivityAddressBinding
     private var selectedAddress: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = ActivityAddressBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address)
 
-        setSupportActionBar(toolbar_address_list_activity)
+        setSupportActionBar(binding.toolbarAddressListActivity)
         val actionBar = supportActionBar
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
         }
 
-        toolbar_address_list_activity.setNavigationOnClickListener {onBackPressed()}
+        binding.toolbarAddressListActivity.setNavigationOnClickListener {onBackPressed()}
 
-        tv_add_address.setOnClickListener {
+        binding.tvAddAddress.setOnClickListener {
             val intent = Intent(this@AddressActivity, EditAddAddressActivity::class.java)
             startActivityForResult(intent, Constants.ADD_ADDRESS_REQUEST_CODE)
         }
@@ -47,7 +49,7 @@ class AddressActivity : UiComponentsActivity() {
         }
 
         if(selectedAddress){
-            tv_title.text = getString(R.string.title_select_address)
+            binding.tvTitle.text = getString(R.string.title_select_address)
         }
 
         getAddressList()
@@ -66,24 +68,24 @@ class AddressActivity : UiComponentsActivity() {
         hideProgressBar()
 
         if(addressList.size > 0){
-            tv_no_address_found.visibility = View.GONE
-            rv_address_list.visibility = View.VISIBLE
+            binding.tvNoAddressFound.visibility = View.GONE
+            binding.rvAddressList.visibility = View.VISIBLE
 
-            rv_address_list.layoutManager = LinearLayoutManager(this@AddressActivity)
-            rv_address_list.setHasFixedSize(true)
+            binding.rvAddressList.layoutManager = LinearLayoutManager(this@AddressActivity)
+            binding.rvAddressList.setHasFixedSize(true)
             val addressAdapter = AddressAdapter(this,addressList,selectedAddress)
-            rv_address_list.adapter = addressAdapter
+            binding.rvAddressList.adapter = addressAdapter
 
             if(!selectedAddress){
                 val editSwipeHandler = object: SwipeToEdit(this){
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                        val adapter = rv_address_list.adapter as AddressAdapter
+                        val adapter = binding.rvAddressList.adapter as AddressAdapter
                         adapter.notifyEditItem(this@AddressActivity,viewHolder.adapterPosition)
                     }
                 }
 
                 val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
-                editItemTouchHelper.attachToRecyclerView(rv_address_list)
+                editItemTouchHelper.attachToRecyclerView(binding.rvAddressList)
 
                 val deleteSwipeHandler = object : SwipeToDelete(this){
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -94,11 +96,11 @@ class AddressActivity : UiComponentsActivity() {
                 }
 
                 val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
-                deleteItemTouchHelper.attachToRecyclerView(rv_address_list)
+                deleteItemTouchHelper.attachToRecyclerView(binding.rvAddressList)
             }
 
         }else{
-            tv_no_address_found.visibility = View.VISIBLE
+            binding.tvNoAddressFound.visibility = View.VISIBLE
         }
 
     }

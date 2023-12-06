@@ -9,9 +9,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hokari.customer.R
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.OrderRowBinding
 import com.hokari.customer.model.Cart
 import com.hokari.customer.ui.activities.CartListActivity
 import com.hokari.customer.utils.LoadGlide
+
+
 
 
 open class CartItemAdapter(
@@ -20,36 +23,36 @@ open class CartItemAdapter(
     private val updateCartItems: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class CartItemViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class CartItemViewHolder(val binding:OrderRowBinding) : RecyclerView.ViewHolder(binding.root)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CartItemViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.cart_item_row, parent, false)
+            OrderRowBinding.inflate(LayoutInflater.from(context), parent,false)
         )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = itemList[position]
-        LoadGlide(context).loadProductImage(model.image, holder.itemView.iv_cart_item_image)
-        holder.itemView.tv_cart_item_price.text = "$${model.price}"
-        holder.itemView.tv_cart_item_title.text = model.title
-        holder.itemView.tv_cart_quantity.text = model.cart_quantity
+        LoadGlide(context).loadProductImage(model.image, holder.binding.iv_cart_item_image)
+        holder.binding.tv_cart_item_price.text = "$${model.price}"
+        holder.binding.tv_cart_item_title.text = model.title
+        holder.binding.tv_cart_quantity.text = model.cart_quantity
 
         if (model.cart_quantity == "0") {
-            holder.itemView.ib_remove_cart_item.visibility = View.GONE
-            holder.itemView.ib_add_cart_item.visibility = View.GONE
+            holder.binding.ib_remove_cart_item.visibility = View.GONE
+            holder.binding.ib_add_cart_item.visibility = View.GONE
 
             if (updateCartItems) {
-                holder.itemView.ib_delete_cart_item.visibility = View.VISIBLE
+                holder.binding.ib_delete_cart_item.visibility = View.VISIBLE
             } else {
-                holder.itemView.ib_delete_cart_item.visibility = View.GONE
+                holder.binding.ib_delete_cart_item.visibility = View.GONE
             }
 
-            holder.itemView.tv_cart_quantity.text =
+            holder.binding.tv_cart_quantity.text =
                 context.resources.getString(R.string.lbl_out_of_stock)
 
-            holder.itemView.tv_cart_quantity.setTextColor(
+            holder.binding.tv_cart_quantity.setTextColor(
                 ContextCompat.getColor(
                     context,
                     R.color.colorSnackBarError
@@ -58,13 +61,13 @@ open class CartItemAdapter(
         } else {
 
             if (updateCartItems) {
-                holder.itemView.ib_remove_cart_item.visibility = View.VISIBLE
-                holder.itemView.ib_add_cart_item.visibility = View.VISIBLE
-                holder.itemView.ib_delete_cart_item.visibility = View.VISIBLE
+                holder.binding.ib_remove_cart_item.visibility = View.VISIBLE
+                holder.binding.ib_add_cart_item.visibility = View.VISIBLE
+                holder.binding.ib_delete_cart_item.visibility = View.VISIBLE
             } else {
-                holder.itemView.ib_remove_cart_item.visibility = View.GONE
-                holder.itemView.ib_add_cart_item.visibility = View.GONE
-                holder.itemView.ib_delete_cart_item.visibility = View.GONE
+                holder.binding.ib_remove_cart_item.visibility = View.GONE
+                holder.binding.ib_add_cart_item.visibility = View.GONE
+                holder.binding.ib_delete_cart_item.visibility = View.GONE
             }
 
 
@@ -77,7 +80,7 @@ open class CartItemAdapter(
             )
         }
 
-        holder.itemView.ib_delete_cart_item.setOnClickListener {
+        holder..ib_delete_cart_item.setOnClickListener {
             when (context) {
                 is CartListActivity -> {
                     context.showProgressBar(context.getString(R.string.please_wait))

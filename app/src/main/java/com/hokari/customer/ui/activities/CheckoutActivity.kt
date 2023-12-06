@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hokari.customer.R
 
 import com.hokari.customer.adapter.CartItemAdapter
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.ActivityCheckoutBinding
 import com.hokari.customer.model.Address
 import com.hokari.customer.model.Cart
 import com.hokari.customer.model.Order
@@ -18,6 +20,7 @@ import kotlin.collections.ArrayList
 
 class CheckoutActivity : UiComponentsActivity() {
 
+    private lateinit var binding: ActivityCheckoutBinding
     private var lastAddressDetails: Address? = null
     private lateinit var lastProductList: ArrayList<Product>
     private lateinit var lastCartItemList: ArrayList<Cart>
@@ -26,12 +29,13 @@ class CheckoutActivity : UiComponentsActivity() {
     private lateinit var orderDetails: Order
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = ActivityCheckoutBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_checkout)
+        setContentView(binding.root)
         setupActionBar()
         getProductList()
 
-        btn_place_order.setOnClickListener {
+        binding.btnPlaceOrder.setOnClickListener {
             placeOrder()
         }
 
@@ -40,15 +44,15 @@ class CheckoutActivity : UiComponentsActivity() {
         }
 
         if(lastAddressDetails != null){
-            tv_checkout_address_type.text = lastAddressDetails?.type
-            tv_checkout_full_name.text = lastAddressDetails?.fullName
-            tv_checkout_address.text = "${lastAddressDetails!!.address}, ${lastAddressDetails!!.zipCode}"
-            tv_checkout_additional_note.text = lastAddressDetails?.additionalNote
+            binding.tvCheckoutAddressType.text = lastAddressDetails?.type
+            binding.tvCheckoutFullName.text = lastAddressDetails?.fullName
+            binding.tvCheckoutAddress.text = "${lastAddressDetails!!.address}, ${lastAddressDetails!!.zipCode}"
+            binding.tvCheckoutAdditionalNote.text = lastAddressDetails?.additionalNote
 
             if (lastAddressDetails?.otherDetails!!.isNotEmpty()) {
-                tv_checkout_other_details.text = lastAddressDetails?.otherDetails
+                binding.tvCheckoutOtherDetails.text = lastAddressDetails?.otherDetails
             }
-            tv_checkout_mobile_number.text = lastAddressDetails?.mobileNumber
+            binding.tvCheckoutMobileNumber.text = lastAddressDetails?.mobileNumber
 
         }
 
@@ -116,11 +120,11 @@ class CheckoutActivity : UiComponentsActivity() {
             }
         }
 
-        rv_cart_list_items.layoutManager = LinearLayoutManager(this@CheckoutActivity)
-        rv_cart_list_items.setHasFixedSize(true)
+        binding.rvCartListItems.layoutManager = LinearLayoutManager(this@CheckoutActivity)
+        binding.rvCartListItems.setHasFixedSize(true)
 
         val cartListAdapter = CartItemAdapter(this@CheckoutActivity,lastCartItemList,false)
-        rv_cart_list_items.adapter = cartListAdapter
+        binding.rvCartListItems.adapter = cartListAdapter
 
         for(item in lastCartItemList){
             val availableQuantity = item.stock_quantity.toInt()
@@ -131,15 +135,15 @@ class CheckoutActivity : UiComponentsActivity() {
             }
         }
 
-        tv_checkout_sub_total.text = "$${lastSubTotal}"
-        tv_checkout_shipping_charge.text = "$10.0"
+        binding.tvCheckoutSubTotal.text = "$${lastSubTotal}"
+        binding.tvCheckoutShippingCharge.text = "$10.0"
         if(lastSubTotal>0){
-            ll_checkout_place_order.visibility = View.VISIBLE
+            binding.llCheckoutPlaceOrder.visibility = View.VISIBLE
             lastTotal = lastSubTotal+10.0
-            tv_checkout_total_amount.text = "$$lastTotal"
+            binding.tvCheckoutTotalAmount.text = "$$lastTotal"
         }
         else{
-            ll_checkout_place_order.visibility = View.GONE
+            binding.llCheckoutPlaceOrder.visibility = View.GONE
         }
 
     }
@@ -148,7 +152,7 @@ class CheckoutActivity : UiComponentsActivity() {
 
     private fun setupActionBar() {
 
-        setSupportActionBar(toolbar_checkout_activity)
+        setSupportActionBar(binding.toolbarCheckoutActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -156,7 +160,7 @@ class CheckoutActivity : UiComponentsActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
         }
 
-        toolbar_checkout_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarCheckoutActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
 
@@ -164,11 +168,3 @@ class CheckoutActivity : UiComponentsActivity() {
 
 
 }
-
-
-
-
-
-
-
-

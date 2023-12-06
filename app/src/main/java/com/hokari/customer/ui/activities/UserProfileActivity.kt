@@ -16,12 +16,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
-
 import com.hokari.customer.database.Database
 import com.hokari.customer.databinding.ActivityUserProfileBinding
 import com.hokari.customer.model.User
 import com.hokari.customer.utils.Constants
 import com.hokari.customer.utils.LoadGlide
+import com.hokari.customer.R
 
 
 class UserProfileActivity : AppCompatActivity() {
@@ -48,47 +48,47 @@ class UserProfileActivity : AppCompatActivity() {
 
         val comingFromSettings = intent.getIntExtra("fromSettings",0)
         if(comingFromSettings == 1){
-            toolbar_user_profile_activity.tv_title.text = getString(R.string.edit_profile)
+//            binding.toolbarUserProfileActivity.tv_title.text = getString(R.string.edit_profile)
             setupActionBar()
-            LoadGlide(this@UserProfileActivity).loadUserPicture(myUserDetails.image, iv_user_photo)
-            et_first_name.setText(myUserDetails.firstName)
-            et_last_name.setText(myUserDetails.lastName)
+            LoadGlide(this@UserProfileActivity).loadUserPicture(myUserDetails.image, binding.ivUserPhoto)
+            binding.etFirstName.setText(myUserDetails.firstName)
+            binding.etLastName.setText(myUserDetails.lastName)
 
-            et_email.isEnabled = false
-            et_email.setText(myUserDetails.email)
+            binding.etEmail.isEnabled = false
+            binding.etEmail.setText(myUserDetails.email)
 
             if (myUserDetails.mobile != 0L) {
-                et_mobile_number.setText(myUserDetails.mobile.toString())
+                binding.etMobileNumber.setText(myUserDetails.mobile.toString())
             }
             if (myUserDetails.gender == "Male") {
-                rb_male.isChecked = true
+                binding.rbMale.isChecked = true
             } else {
-                rb_female.isChecked = true
+                binding.rbFemale.isChecked = true
             }
 
             
         }
 
-        et_first_name.isEnabled = false
-        et_first_name.setText(myUserDetails.firstName)
+        binding.etFirstName.isEnabled = false
+        binding.etFirstName.setText(myUserDetails.firstName)
 
-        et_last_name.isEnabled = false
-        et_last_name.setText(myUserDetails.lastName)
+        binding.etLastName.isEnabled = false
+        binding.etLastName.setText(myUserDetails.lastName)
 
-        et_email.isEnabled = false
-        et_email.setText(myUserDetails.email)
-
-
+        binding.etEmail.isEnabled = false
+        binding.etEmail.setText(myUserDetails.email)
 
 
 
 
-        iv_user_photo.setOnClickListener {
+
+
+        binding.ivUserPhoto.setOnClickListener {
             imageViewClicked(view)
 
         }
 
-        btn_submit.setOnClickListener {
+        binding.btnSubmit.setOnClickListener {
             if(checkUserDetails()){
                 showProgressBar()
                 if(selectedPicture != null){
@@ -106,14 +106,14 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun setupActionBar(){
-        setSupportActionBar(toolbar_user_profile_activity)
+        setSupportActionBar(binding.toolbarUserProfileActivity)
         val actionBar = supportActionBar
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
         }
 
-        toolbar_user_profile_activity.setNavigationOnClickListener {
+        binding.toolbarUserProfileActivity.setNavigationOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
             finish()
@@ -126,19 +126,19 @@ class UserProfileActivity : AppCompatActivity() {
 
         val userDetailsHashMap = HashMap<String, Any>()
 
-        val mobileNumber = et_mobile_number.text.toString()
-        val firstName = et_first_name.text.toString().trim { it <= ' ' }
+        val mobileNumber = binding.etMobileNumber.text.toString()
+        val firstName = binding.etFirstName.text.toString().trim { it <= ' ' }
         if (firstName != myUserDetails.firstName) {
             userDetailsHashMap["firstName"] = firstName
         }
 
-        val lastName = et_last_name.text.toString().trim { it <= ' ' }
+        val lastName = binding.etLastName.text.toString().trim { it <= ' ' }
         if (lastName != myUserDetails.lastName) {
             userDetailsHashMap["lastName"] = lastName
         }
 
 
-        val gender = if(rb_male.isChecked){
+        val gender = if(binding.rbMale.isChecked){
             "Male"
         }else{
             "Female"
@@ -202,7 +202,7 @@ class UserProfileActivity : AppCompatActivity() {
                     intentFromResult.data
                     selectedPicture = intentFromResult.data
                     selectedPicture.let {
-                        LoadGlide(this).loadUserPicture(selectedPicture!!,iv_user_photo)
+                        LoadGlide(this).loadUserPicture(selectedPicture!!,binding.ivUserPhoto)
                     }
                 }
             }
@@ -224,7 +224,7 @@ class UserProfileActivity : AppCompatActivity() {
 
     private fun checkUserDetails(): Boolean {
         return when {
-            TextUtils.isEmpty(et_mobile_number.text.toString().trim { it <= ' ' }) -> {
+            TextUtils.isEmpty(binding.etMobileNumber.text.toString().trim { it <= ' ' }) -> {
                 Toast.makeText(this,"Please enter your phone number.",Toast.LENGTH_LONG).show()
                 false
             }
@@ -240,16 +240,17 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     fun showProgressBar() {
-        myProgressDialog = Dialog(this)
+        var myProgressDialog = Dialog(this)
         myProgressDialog.setContentView(R.layout.progress_bar)
-        myProgressDialog.tv_progress_text.setText(R.string.please_wait)
+//        myProgressDialog.tv_progress_text.setText(R.string.please_wait)
         myProgressDialog.setCancelable(false)
         myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.show()
     }
 
     fun hideProgressBar() {
-        myProgressDialog.dismiss()
+//        var myProgressDialog = null
+//        myProgressDialog.dismiss()
     }
 
 

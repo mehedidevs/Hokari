@@ -4,17 +4,23 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hokari.customer.R
 
 import com.hokari.customer.adapter.CartItemAdapter
+import com.hokari.customer.databinding.ActivityOrderDetailsBinding
 import com.hokari.customer.model.Order
 
 import java.text.SimpleDateFormat
 import java.util.*
 
 class OrderDetailsActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityOrderDetailsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = ActivityOrderDetailsBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_order_details)
+        setContentView(binding.root)
         setupActionBar()
 
         var orderDetails : Order = Order()
@@ -27,32 +33,32 @@ class OrderDetailsActivity : AppCompatActivity() {
     }
 
     private fun setOrderDetails(orderDetails: Order){
-        tv_order_details_id.text = orderDetails.title
-        tv_order_details_date.text = dateTimeFormatter(orderDetails)
+        binding.tvOrderDetailsId.text = orderDetails.title
+        binding.tvOrderDetailsDate.text = dateTimeFormatter(orderDetails)
 
-        rv_my_order_items_list.layoutManager = LinearLayoutManager(this@OrderDetailsActivity)
-        rv_my_order_items_list.setHasFixedSize(true)
+        binding.rvMyOrderItemsList.layoutManager = LinearLayoutManager(this@OrderDetailsActivity)
+        binding.rvMyOrderItemsList.setHasFixedSize(true)
 
         val cartItemAdapter = CartItemAdapter(this@OrderDetailsActivity,orderDetails.items,false)
 
-        rv_my_order_items_list.adapter = cartItemAdapter
-        tv_my_order_details_address_type.text = orderDetails.address.type
-        tv_my_order_details_full_name.text = orderDetails.address.fullName
-        tv_my_order_details_address.text =
+        binding.rvMyOrderItemsList.adapter = cartItemAdapter
+        binding.tvMyOrderDetailsAddressType.text = orderDetails.address.type
+        binding.tvMyOrderDetailsFullName.text = orderDetails.address.fullName
+        binding.tvMyOrderDetailsAddress.text =
             "${orderDetails.address.address}, ${orderDetails.address.zipCode}"
-        tv_my_order_details_additional_note.text = orderDetails.address.additionalNote
+        binding.tvMyOrderDetailsAdditionalNote.text = orderDetails.address.additionalNote
 
         if (orderDetails.address.otherDetails.isNotEmpty()) {
-            tv_my_order_details_other_details.visibility = View.VISIBLE
-            tv_my_order_details_other_details.text = orderDetails.address.otherDetails
+            binding.tvMyOrderDetailsOtherDetails.visibility = View.VISIBLE
+            binding.tvMyOrderDetailsOtherDetails.text = orderDetails.address.otherDetails
         } else {
-            tv_my_order_details_other_details.visibility = View.GONE
+            binding.tvMyOrderDetailsOtherDetails.visibility = View.GONE
         }
-        tv_my_order_details_mobile_number.text = orderDetails.address.mobileNumber
+        binding.tvMyOrderDetailsMobileNumber.text = orderDetails.address.mobileNumber
 
-        tv_order_details_sub_total.text = orderDetails.sub_total_amount
-        tv_order_details_shipping_charge.text = orderDetails.shipping_charge
-        tv_order_details_total_amount.text = orderDetails.total_amount
+        binding.tvOrderDetailsSubTotal.text = orderDetails.sub_total_amount
+        binding.tvOrderDetailsSubTotal.text = orderDetails.shipping_charge
+        binding.tvOrderDetailsTotalAmount.text = orderDetails.total_amount
 
     }
 
@@ -78,14 +84,14 @@ class OrderDetailsActivity : AppCompatActivity() {
 
     private fun setupActionBar() {
 
-        setSupportActionBar(toolbar_my_order_details_activity)
+        setSupportActionBar(binding.toolbarMyOrderDetailsActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
         }
-        toolbar_my_order_details_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarMyOrderDetailsActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
 

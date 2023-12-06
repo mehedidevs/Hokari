@@ -4,18 +4,22 @@ package com.hokari.customer.ui.activities
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-
+import com.hokari.customer.R
 import com.hokari.customer.adapter.SoldProductAdapter
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.ActivitySoldProductsBinding
 import com.hokari.customer.model.SoldProduct
 
 
 class SoldProductsActivity : UiComponentsActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sold_products)
-        setupActionBar()
 
+    private lateinit var binding: ActivitySoldProductsBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        binding = ActivitySoldProductsBinding.inflate(layoutInflater)
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+        setupActionBar()
         getSoldProductList()
 
     }
@@ -30,17 +34,17 @@ class SoldProductsActivity : UiComponentsActivity() {
     fun successSoldProductList(soldProductList: ArrayList<SoldProduct>){
         hideProgressBar()
         if(soldProductList.size>0){
-            rv_sold_product_items.visibility = View.VISIBLE
-            tv_no_sold_products_found.visibility = View.GONE
+            binding.rvSoldProductItems.visibility = View.VISIBLE
+            binding.tvNoSoldProductsFound.visibility = View.GONE
 
-            rv_sold_product_items.layoutManager = LinearLayoutManager(this)
-            rv_sold_product_items.setHasFixedSize(true)
+            binding.rvSoldProductItems.layoutManager = LinearLayoutManager(this)
+            binding.rvSoldProductItems.setHasFixedSize(true)
             val soldProductsAdapter = SoldProductAdapter(this,soldProductList)
-            rv_sold_product_items.adapter = soldProductsAdapter
+            binding.rvSoldProductItems.adapter = soldProductsAdapter
         }
         else{
-            rv_sold_product_items.visibility = View.GONE
-            tv_no_sold_products_found.visibility = View.VISIBLE
+            binding.rvSoldProductItems.visibility = View.GONE
+            binding.tvNoSoldProductsFound.visibility = View.VISIBLE
         }
 
     }
@@ -49,13 +53,13 @@ class SoldProductsActivity : UiComponentsActivity() {
 
     private fun setupActionBar() {
 
-        setSupportActionBar(toolbar_sold_products_activity)
+        setSupportActionBar(binding.toolbarSoldProductsActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
         }
-        toolbar_sold_products_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarSoldProductsActivity.setNavigationOnClickListener { onBackPressed() }
     }
 }
