@@ -6,20 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.hokari.customer.R
-import com.hokari.customer.databinding.OrderRowBinding
+
 import com.hokari.customer.ui.activities.SoldProductsDetailsActivity
 import com.hokari.customer.model.SoldProduct
 import com.hokari.customer.utils.LoadGlide
+import kotlinx.android.synthetic.main.order_row.view.*
 
 
 class SoldProductAdapter(private val context: Context, private var soldProductList: ArrayList<SoldProduct>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class SoldProductViewHolder(var binding: OrderRowBinding) : RecyclerView.ViewHolder(binding.root)
+    class SoldProductViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return SoldProductViewHolder(
-            OrderRowBinding.inflate(LayoutInflater.from(context),parent,false)
+            LayoutInflater.from(context).inflate(R.layout.order_row,parent,false)
         )
     }
 
@@ -30,12 +30,12 @@ class SoldProductAdapter(private val context: Context, private var soldProductLi
 
             LoadGlide(context).loadProductImage(
                 model.image,
-                holder.binding.ivItemImage
+                holder.itemView.iv_item_image
             )
 
-            holder.binding.tvItemName.text = model.title
-            holder.binding.tvItemPrice.text = "$${model.price}"
-            holder.binding.ibDeleteProduct.visibility = View.GONE
+            holder.itemView.tv_item_name.text = model.title
+            holder.itemView.tv_item_price.text = "$${model.price}"
+            holder.itemView.ib_delete_product.visibility = View.GONE
 
             holder.itemView.setOnClickListener {
                 val intent = Intent(context, SoldProductsDetailsActivity::class.java)

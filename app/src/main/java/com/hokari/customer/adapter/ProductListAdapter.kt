@@ -6,22 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.hokari.customer.databinding.ProductItemRowBinding
 import com.hokari.customer.ui.activities.ProductDetailsActivity
 import com.hokari.customer.ui.fragments.ProductFragment
-import com.hokari.customer.R
+
+
 import com.hokari.customer.model.Product
 import com.hokari.customer.utils.LoadGlide
+import kotlinx.android.synthetic.main.product_item_row.view.*
 
 
 open class ProductsListAdapter(private val context: Context, private var list: ArrayList<Product>, private val fragment: ProductFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class ProductViewHolder(var binding: ProductItemRowBinding) : RecyclerView.ViewHolder(binding.root)
+    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ProductViewHolder(
-            ProductItemRowBinding.inflate(LayoutInflater.from(context),parent, false))
-
+        return ProductViewHolder(LayoutInflater.from(context).inflate(R.layout.product_item_row, parent, false))
     }
 
 
@@ -30,13 +29,13 @@ open class ProductsListAdapter(private val context: Context, private var list: A
 
         if (holder is ProductViewHolder) {
 
-            LoadGlide(context).loadProductImage(model.image, holder.binding.ivItemImage)
+            LoadGlide(context).loadProductImage(model.image, holder.itemView.iv_item_image)
 
-            holder.binding.tvItemName.text = model.title
-            holder.binding.tvItemPrice.text = "$${model.price}"
+            holder.itemView.tv_item_name.text = model.title
+            holder.itemView.tv_item_price.text = "$${model.price}"
 
 
-            holder.binding.ibDeleteProduct.setOnClickListener {
+            holder.itemView.ib_delete_product.setOnClickListener {
                 fragment.deleteProduct(model.product_id)
 
             }
