@@ -8,8 +8,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.hokari.customer.R
 
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.ActivityOrderDetailsBinding
+import com.hokari.customer.databinding.ActivityProductDetailsBinding
 import com.hokari.customer.model.Cart
 import com.hokari.customer.model.Product
 import com.hokari.customer.utils.Constants
@@ -24,10 +27,13 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
     private lateinit var productModel: Product
     var productOwnerId : String = ""
     private lateinit var myProductDetails: Product
+    lateinit var  binding: ActivityProductDetailsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product_details)
+
+        binding = ActivityProductDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupActionBar()
 
 
@@ -43,20 +49,20 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
         }
 
         if(Database().getUserID() == productOwnerId){
-            btn_add_to_cart.visibility = View.GONE
-            btn_go_to_cart.visibility = View.GONE
+            binding.btnAddToCart.visibility = View.GONE
+            binding.btnGoToCart.visibility = View.GONE
 
         }
         else{
-            btn_add_to_cart.visibility = View.VISIBLE
+            binding.btnAddToCart.visibility = View.VISIBLE
         }
 
 
         getProductDetails()
 
-        btn_add_to_cart.setOnClickListener(this)
+        binding.btnAddToCart.setOnClickListener(this)
 
-        btn_go_to_cart.setOnClickListener {
+        binding.btnGoToCart.setOnClickListener {
             startActivity(Intent(this@ProductDetailsActivity, CartListActivity::class.java))
         }
 
@@ -86,21 +92,27 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
 
     fun productDetailsSuccess(product: Product){
         myProductDetails = product
-        LoadGlide(this@ProductDetailsActivity).loadProductImage(product.image,iv_product_detail_image)
-        tv_product_details_available_quantity.text = product.stock_quantity
-        tv_product_details_description.text = product.description
-        tv_product_details_price.text = "$${product.price}"
-        tv_product_details_title.text = product.title
+        LoadGlide(this@ProductDetailsActivity).loadProductImage(product.image,binding.ivProductDetailImage)
+        binding.apply {
+            tvProductDetailsAvailableQuantity.text = product.stock_quantity
+            tvProductDetailsDescription.text = product.description
+            tvProductDetailsPrice.text = "$${product.price}"
+            tvProductDetailsTitle.text = product.title
+        }
+
         product.product_id = myProductId
         productModel = product
 
         if(product.stock_quantity.toInt() == 0){
             hideProgressBar()
-            btn_add_to_cart.visibility = View.GONE
-            tv_product_details_available_quantity.text = getString(R.string.lbl_out_of_stock)
-            tv_product_details_available_quantity.setTextColor(ContextCompat.getColor(this@ProductDetailsActivity,
-                R.color.colorSnackBarError
-            ))
+            binding.apply {
+                btnAddToCart.visibility = View.GONE
+                tvProductDetailsAvailableQuantity.text = getString(R.string.lbl_out_of_stock)
+                tvProductDetailsAvailableQuantity.setTextColor(ContextCompat.getColor(this@ProductDetailsActivity,
+                    R.color.colorSnackBarError
+                ))
+            }
+
         }
         else{
             if(Database().getUserID() == product.user_id){
@@ -116,8 +128,8 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
 
     fun productExistsInCard(){
         hideProgressBar()
-        btn_add_to_cart.visibility = View.GONE
-        btn_go_to_cart.visibility = View.VISIBLE
+        binding.btnAddToCart.visibility = View.GONE
+        binding.btnGoToCart.visibility = View.VISIBLE
     }
 
 
@@ -125,20 +137,7 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
 
 
 
-    private fun setupActionBar() {
 
-        setSupportActionBar(toolbar_product_details_activity)
-
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
-        }
-
-
-
-        toolbar_product_details_activity.setNavigationOnClickListener { onBackPressed() }
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val intent = Intent(this@ProductDetailsActivity, AddProductActivity::class.java)
@@ -181,14 +180,24 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
     fun addToCartSuccess(){
         hideProgressBar()
         Toast.makeText(this,getString(R.string.add_to_cart_success),Toast.LENGTH_LONG).show()
-        btn_add_to_cart.visibility = View.GONE
-        btn_go_to_cart.visibility = View.VISIBLE
+        binding.btnAddToCart.visibility = View.GONE
+        binding.btnGoToCart.visibility = View.VISIBLE
     }
 
 
+    private fun setupActionBar() {
+        lateinit var binding: ActivityProductDetailsBinding
+        binding = ActivityProductDetailsBinding.inflate(layoutInflater)
 
+        setSupportActionBar(binding.toolbarProductDetailsActivity)
 
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
+        }
 
+    }
 
 
 }
