@@ -11,11 +11,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.hokari.customer.databinding.ActivityUserProfileBinding
 import com.hokari.customer.model.Address
 import com.hokari.customer.model.Cart
 import com.hokari.customer.model.Order
 import com.hokari.customer.model.Product
 import com.hokari.customer.model.SoldProduct
+import com.hokari.customer.model.User
 import com.hokari.customer.ui.activities.AddProductActivity
 import com.hokari.customer.ui.activities.AddressActivity
 import com.hokari.customer.ui.activities.CartListActivity
