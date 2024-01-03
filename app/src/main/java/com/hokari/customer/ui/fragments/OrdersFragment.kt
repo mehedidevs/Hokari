@@ -6,14 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hokari.customer.R
 
 import com.hokari.customer.adapter.OrderAdapter
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.FragmentDashboardBinding
+import com.hokari.customer.databinding.FragmentOrdersBinding
 import com.hokari.customer.model.Order
 
 
 
 class OrdersFragment() : UiComponentsFragment() {
+
+    lateinit var binding: FragmentOrdersBinding
+
 
 
 
@@ -34,25 +40,30 @@ class OrdersFragment() : UiComponentsFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(R.layout.fragment_orders, container, false)
+        binding = FragmentOrdersBinding.inflate(inflater, container, false)
 
+        return binding.root
     }
 
     fun showOrderList(orderList: ArrayList<Order>){
         hideProgressBar()
         if(orderList.size>0){
-            rv_my_order_items.visibility = View.VISIBLE
-            tv_no_orders_found.visibility = View.GONE
 
-            rv_my_order_items.layoutManager = LinearLayoutManager(activity)
-            rv_my_order_items.setHasFixedSize(true)
+            binding.apply {
+               rvMyOrderItems.visibility = View.VISIBLE
+                tvNoOrdersFound.visibility = View.GONE
 
-            val orderListAdapter = OrderAdapter(requireActivity(),orderList)
-            rv_my_order_items.adapter = orderListAdapter
+                rvMyOrderItems.layoutManager = LinearLayoutManager(activity)
+                rvMyOrderItems.setHasFixedSize(true)
+
+                val orderListAdapter = OrderAdapter(requireActivity(),orderList)
+                rvMyOrderItems.adapter = orderListAdapter
+            }
+
         }
         else{
-            rv_my_order_items.visibility = View.GONE
-            tv_no_orders_found.visibility = View.VISIBLE
+            binding.rvMyOrderItems.visibility = View.GONE
+            binding.tvNoOrdersFound.visibility = View.VISIBLE
         }
     }
 

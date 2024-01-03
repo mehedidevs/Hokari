@@ -13,20 +13,23 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hokari.customer.R
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.ActivityForgotPasswordBinding
+import com.hokari.customer.databinding.ActivityLoginBinding
+import com.hokari.customer.databinding.ProgressBarBinding
 import com.hokari.customer.model.User
 import com.hokari.customer.utils.Constants
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.progress_bar.*
 
 lateinit var myProgressDialog: Dialog
 private lateinit var auth : FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
+    lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_login)
 
-        btn_login.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             loginUser()
         }
 
@@ -39,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        tv_forgot_password.setOnClickListener {
+       binding.tvForgotPassword.setOnClickListener {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
 
@@ -56,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
             )
         }
 
-        tv_register.setOnClickListener {
+        binding.tvRegister .setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
@@ -68,8 +71,8 @@ class LoginActivity : AppCompatActivity() {
 
     fun loginUser(){
 
-        val email = et_email.text.toString()
-        val password = et_password.text.toString()
+        val email = binding.etEmail.text.toString()
+        val password = binding.etPassword.text.toString()
 
         if(email != "" && password!=""){
             showProgressBar()
@@ -95,9 +98,12 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun showProgressBar() {
+
+        lateinit var binding: ProgressBarBinding
+        binding = ProgressBarBinding.inflate(layoutInflater)
         myProgressDialog = Dialog(this)
         myProgressDialog.setContentView(R.layout.progress_bar)
-        myProgressDialog.tv_progress_text.setText(R.string.please_wait)
+        binding.tvProgressText.setText(R.string.please_wait)
         myProgressDialog.setCancelable(false)
         myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.show()

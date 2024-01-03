@@ -5,16 +5,20 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hokari.customer.R
 
 import com.hokari.customer.adapter.ProductsListAdapter
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.FragmentOrdersBinding
+import com.hokari.customer.databinding.FragmentProductsBinding
 import com.hokari.customer.model.Product
 import com.hokari.customer.ui.activities.AddProductActivity
 import com.hokari.customer.ui.activities.SoldProductsActivity
-
+import io.grpc.Context
 
 
 class ProductFragment : UiComponentsFragment() {
+    lateinit var  binding: FragmentProductsBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +32,9 @@ class ProductFragment : UiComponentsFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(R.layout.fragment_products, container, false)
+        binding = FragmentProductsBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onResume() {
@@ -63,16 +69,19 @@ class ProductFragment : UiComponentsFragment() {
     fun successProductListFS(productList: ArrayList<Product>){
         hideProgressBar()
         if(productList.size>0){
-            rv_my_product_items.visibility = View.VISIBLE
-            tv_no_products_found.visibility = View.GONE
+            binding.apply {
+                rvMyProductItems.visibility = View.VISIBLE
+                tvNoProductsFound.visibility = View.GONE
 
-            rv_my_product_items.layoutManager = LinearLayoutManager(activity)
-            rv_my_product_items.setHasFixedSize(true)
-            val adapterProducts = ProductsListAdapter(requireActivity(),productList,this)
-            rv_my_product_items.adapter = adapterProducts
+                rvMyProductItems.layoutManager = LinearLayoutManager(activity)
+                rvMyProductItems.setHasFixedSize(true)
+                val adapterProducts = ProductsListAdapter(requireActivity(),productList, this@ProductFragment)
+                rvMyProductItems.adapter = adapterProducts
+            }
+
         }else{
-            rv_my_product_items.visibility = View.GONE
-            tv_no_products_found.visibility = View.VISIBLE
+            binding.rvMyProductItems.visibility = View.GONE
+            binding.tvNoProductsFound.visibility = View.VISIBLE
         }
 
 

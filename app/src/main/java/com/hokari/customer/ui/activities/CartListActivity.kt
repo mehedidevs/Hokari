@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hokari.customer.R
 
 import com.hokari.customer.adapter.CartItemAdapter
 import com.hokari.customer.database.Database
+import com.hokari.customer.databinding.ActivityAddressBinding
+import com.hokari.customer.databinding.ActivityCartListBinding
 import com.hokari.customer.model.Cart
 import com.hokari.customer.model.Product
 
@@ -18,13 +21,15 @@ class CartListActivity : UiComponentsActivity() {
     private lateinit var lastProductsList: ArrayList<Product>
     private lateinit var lastCartItems: ArrayList<Cart>
 
+    lateinit var  binding: ActivityCartListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cart_list)
+        binding= ActivityCartListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupActionBar()
 
-        btn_checkout.setOnClickListener {
+        binding.btnCheckout.setOnClickListener {
             val intent = Intent(this@CartListActivity, AddressActivity::class.java)
             intent.putExtra("extra_select_address",true)
             startActivity(intent)
@@ -60,17 +65,22 @@ class CartListActivity : UiComponentsActivity() {
 
         if (lastCartItems.size > 0) {
 
-            rv_cart_items_list.visibility = View.VISIBLE
-            ll_checkout.visibility = View.VISIBLE
-            tv_no_cart_item_found.visibility = View.GONE
+            binding.apply {
 
-            rv_cart_items_list.layoutManager = LinearLayoutManager(this@CartListActivity)
-            rv_cart_items_list.setHasFixedSize(true)
+                rvCartItemsList.visibility = View.VISIBLE
+                binding.llCheckout.visibility = View.VISIBLE
+                binding.tvNoCartItemFound.visibility = View.GONE
 
-            val cartListAdapter = CartItemAdapter(this@CartListActivity, lastCartItems,true)
-            rv_cart_items_list.adapter = cartListAdapter
+                rvCartItemsList.layoutManager = LinearLayoutManager(this@CartListActivity)
+                rvCartItemsList.setHasFixedSize(true)
 
+                val cartListAdapter = CartItemAdapter(this@CartListActivity, lastCartItems,true)
+                rvCartItemsList.adapter = cartListAdapter
+
+
+            }
             var subTotal: Double = 0.0
+
 
             for (item in lastCartItems) {
 
@@ -87,23 +97,26 @@ class CartListActivity : UiComponentsActivity() {
 
             }
 
-            tv_sub_total.text = "$$subTotal"
+          binding.tvSubTotal.text = "$$subTotal"
 
-            tv_shipping_charge.text = "$10.0" //change the cargo fee logic here.
+           binding.tvShippingCharge.text = "$10.0" //change the cargo fee logic here.
 
             if (subTotal > 0) {
-                ll_checkout.visibility = View.VISIBLE
+                binding.llCheckout.visibility = View.VISIBLE
 
                 val total = subTotal + 10
-                tv_total_amount.text = "$$total"
+               binding.tvTotalAmount.text = "$$total"
             } else {
-                ll_checkout.visibility = View.GONE
+                binding.llCheckout.visibility = View.GONE
             }
 
         } else {
-            rv_cart_items_list.visibility = View.GONE
-            ll_checkout.visibility = View.GONE
-            tv_no_cart_item_found.visibility = View.VISIBLE
+            binding.apply {
+                rvCartItemsList.visibility = View.GONE
+                llCheckout.visibility = View.GONE
+                tvNoCartItemFound.visibility = View.VISIBLE
+            }
+
         }
 
 
@@ -125,14 +138,14 @@ class CartListActivity : UiComponentsActivity() {
 
     private fun setupActionBar() {
 
-        setSupportActionBar(toolbar_cart_list_activity)
+        setSupportActionBar(binding.toolbarCartListActivity)
 
         val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
         }
-        toolbar_cart_list_activity.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbarCartListActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun getProductsFromFB(){

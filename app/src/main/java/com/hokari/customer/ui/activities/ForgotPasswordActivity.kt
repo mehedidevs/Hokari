@@ -8,38 +8,43 @@ import android.widget.Toast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hokari.customer.R
+import com.hokari.customer.databinding.ActivityEditAddAddressBinding
+import com.hokari.customer.databinding.ActivityForgotPasswordBinding
+import com.hokari.customer.databinding.ProgressBarBinding
 
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
     private lateinit var myProgressDialog: Dialog
+    lateinit var binding: ActivityForgotPasswordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityForgotPasswordBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_forgot_password)
 
 
-        setSupportActionBar(toolbar_forgot_password_activity)
+        setSupportActionBar(binding.toolbarForgotPasswordActivity)
         val actionBar = supportActionBar
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
         }
 
-        toolbar_forgot_password_activity.setNavigationOnClickListener {
+        binding.toolbarForgotPasswordActivity.setNavigationOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        btn_send_reset_email.setOnClickListener {
+        binding.btnSendResetEmail.setOnClickListener {
             sendResetMail()
         }
 
     }
 
     fun sendResetMail(){
-        val email = et_emailForgotPass.text.toString()
+        val email = binding.etEmailForgotPass.text.toString()
         showProgressBar()
         Firebase.auth.sendPasswordResetEmail(email)
             .addOnCompleteListener { task ->
@@ -59,11 +64,13 @@ class ForgotPasswordActivity : AppCompatActivity() {
     }
 
     private fun showProgressBar() {
+        lateinit var binding: ProgressBarBinding
+        binding = ProgressBarBinding.inflate(layoutInflater)
         myProgressDialog = Dialog(this)
         myProgressDialog.setContentView(R.layout.progress_bar)
         myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.setCancelable(false)
-        myProgressDialog.tv_progress_text.setText(R.string.please_wait)
+        binding.tvProgressText.setText(R.string.please_wait)
         myProgressDialog.show()
     }
 
