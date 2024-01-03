@@ -9,8 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.hokari.customer.R
-
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.ActivityProductDetailsBinding
 import com.hokari.customer.model.Cart
 import com.hokari.customer.model.Product
@@ -46,7 +45,7 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
             productOwnerId = intent.getStringExtra("extra_product_owner_id").toString()
         }
 
-        if(Database().getUserID() == productOwnerId){
+        if(AppController().getUserID() == productOwnerId){
             binding.btnAddToCart.visibility = View.GONE
             binding.btnGoToCart.visibility = View.GONE
 
@@ -82,7 +81,7 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
 
     fun getProductDetails(){
         showProgressBar(getString(R.string.please_wait))
-        Database().getProductDetails(this@ProductDetailsActivity,myProductId)
+        AppController().getProductDetails(this@ProductDetailsActivity,myProductId)
 
     }
 
@@ -107,11 +106,11 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
             ))
         }
         else{
-            if(Database().getUserID() == product.user_id){
+            if(AppController().getUserID() == product.user_id){
                 hideProgressBar()
             }
             else{
-                Database().checkIfItemExistsInCart(this,product.product_id)
+                AppController().checkIfItemExistsInCart(this,product.product_id)
             }
         }
 
@@ -158,7 +157,7 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
 
     private fun addToCart(){
         val cartItem = Cart(
-            Database().getUserID(),
+            AppController().getUserID(),
             productOwnerId,
             myProductId,
             myProductDetails.title,
@@ -167,7 +166,7 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
             Constants.DEFAULT_CART_QUANTITY
         )
         showProgressBar(getString(R.string.please_wait))
-        Database().addItemToCart(this,cartItem)
+        AppController().addItemToCart(this,cartItem)
 
     }
 

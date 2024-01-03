@@ -5,8 +5,7 @@ import android.os.Bundle
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hokari.customer.R
-
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.ActivitySettingsBinding
 import com.hokari.customer.model.User
 import com.hokari.customer.utils.Constants
@@ -67,7 +66,7 @@ class SettingsActivity : UiComponentsActivity() {
 
     private fun getUserDetails(){
         showProgressBar(resources.getString(R.string.please_wait))
-        Database().getCurrentUserDetails(this)
+        AppController().getCurrentUserDetails(this)
 
 
     }

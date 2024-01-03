@@ -16,6 +16,7 @@ import com.hokari.customer.model.Cart
 import com.hokari.customer.model.Order
 import com.hokari.customer.model.Product
 import com.hokari.customer.model.SoldProduct
+import com.hokari.customer.model.User
 import com.hokari.customer.ui.activities.AddProductActivity
 import com.hokari.customer.ui.activities.AddressActivity
 import com.hokari.customer.ui.activities.CartListActivity
@@ -27,19 +28,16 @@ import com.hokari.customer.ui.activities.RegisterActivity
 import com.hokari.customer.ui.activities.SettingsActivity
 import com.hokari.customer.ui.activities.SoldProductsActivity
 import com.hokari.customer.ui.activities.UserProfileActivity
-
-
 import com.hokari.customer.ui.fragments.DashboardFragment
 import com.hokari.customer.ui.fragments.OrdersFragment
 import com.hokari.customer.ui.fragments.ProductFragment
 import com.hokari.customer.utils.Constants
 
 
-class Database {
+
+class AppController {
 
     private val db = FirebaseFirestore.getInstance()
-
-
     fun registerUser(activity: RegisterActivity, userInfo: User) {
 
         db.collection("users")
@@ -76,7 +74,7 @@ class Database {
             .get()
             .addOnSuccessListener { document ->
                 Log.i(javaClass.simpleName, document.toString())
-                val user = document.toObject(User::class.java)
+                val user = document.toObject(com.hokari.customer.model.User::class.java)
 
                 //Save Name and Surname to SP.
                 val sharedPreferences = activity.getSharedPreferences(Constants.SHOP_PREFERENCES,Context.MODE_PRIVATE)
@@ -91,9 +89,9 @@ class Database {
                 }
                 when(activity){
                     is UserProfileActivity -> {
-                        activity.et_email.setText(user.email)
-                        activity.et_first_name.setText(user.firstName)
-                        activity.et_last_name.setText(user.lastName)
+                        activity.binding.etEmail.setText(user.email)
+                        activity.binding.etFirstName.setText(user.firstName)
+                        activity.binding.etLastName.setText(user.lastName)
                     }
 
                     is SettingsActivity ->{
@@ -614,12 +612,4 @@ class Database {
                 activity.hideProgressBar()
             }
     }
-
-
-
-
-
-
-
-
 }

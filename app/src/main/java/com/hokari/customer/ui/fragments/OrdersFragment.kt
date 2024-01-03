@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hokari.customer.R
 import com.hokari.customer.adapter.OrderAdapter
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.model.Order
 import com.hokari.customer.databinding.FragmentOrdersBinding
 class OrdersFragment() : UiComponentsFragment() {
@@ -42,6 +42,6 @@ class OrdersFragment() : UiComponentsFragment() {
     }
     private fun getOrderList(){
         showProgressBar(getString(R.string.please_wait))
-        Database().getOrderList(this)
+        AppController().getOrderList(this)
     }
 }

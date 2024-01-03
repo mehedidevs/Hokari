@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.hokari.customer.R
 import com.hokari.customer.databinding.FragmentUiComponentsBinding
+import com.hokari.customer.databinding.ProgressBarBinding
+
 open class UiComponentsFragment : Fragment() {
     private lateinit var myProgressDialog : Dialog
     private lateinit var binding: FragmentUiComponentsBinding
@@ -20,14 +22,15 @@ open class UiComponentsFragment : Fragment() {
         binding = FragmentUiComponentsBinding.inflate(inflater, container, false)
         return binding.root
     }
-    fun showProgressBar(text: String) {
-        myProgressDialog = Dialog(requireActivity())
-        myProgressDialog.setContentView(R.layout.dialog_progress)
-//        myProgressDialog.tv_progress_text.text = text
+    fun showProgressBar(string: String) {
+        myProgressDialog = Dialog(this)
+        val binding: ProgressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+        myProgressDialog.setContentView(binding.root)
+        binding.tvProgressText.setText(R.string.please_wait)
         myProgressDialog.setCancelable(false)
         myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.show()
-    }
+        }
     fun hideProgressBar() {
         myProgressDialog.dismiss()
     }

@@ -25,7 +25,8 @@ open class UiComponentsActivity : AppCompatActivity() {
     fun showProgressBar(text: String) {
         myProgressDialog = Dialog(this)
         myProgressDialog.setContentView(R.layout.dialog_progress)
-//        myProgressDialog.tv_progress_text.text = text
+//        myProgressDialog.tv_progress_text.setText(R.string.please_wait)
+//        TODO: Fix This
         myProgressDialog.setCancelable(false)
         myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.show()

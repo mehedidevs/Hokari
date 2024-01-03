@@ -15,7 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.hokari.customer.R
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.ActivityAddProductBinding
 import com.hokari.customer.model.Product
 import com.hokari.customer.utils.Constants
@@ -232,7 +232,7 @@ class AddProductActivity : UiComponentsActivity() {
 
     private fun uploadProductImage() {
         showProgressBar(resources.getString(R.string.please_wait))
-        Database().uploadImageToStorage(this@AddProductActivity, selectedPicture!!, "Product_Image")
+        AppController().uploadImageToStorage(this@AddProductActivity, selectedPicture!!, "Product_Image")
 
 
     }
@@ -251,7 +251,7 @@ class AddProductActivity : UiComponentsActivity() {
             .getString(Constants.CURRENT_NAME, "")!!
 
         val product = Product(
-            Database().getUserID(),
+            AppController().getUserID(),
             username,
             binding.etProductTitle.text.toString().trim { it <= ' ' },
             binding.etProductPrice.text.toString().trim { it <= ' ' },
@@ -260,7 +260,7 @@ class AddProductActivity : UiComponentsActivity() {
             productURL
         )
 
-        Database().uploadProductDetails(this, product)
+        AppController().uploadProductDetails(this, product)
 
 
     }
@@ -284,7 +284,7 @@ class AddProductActivity : UiComponentsActivity() {
         productList.put("title", binding.etProductTitle.text.toString())
         productList.put("stock_quantity", binding.etProductQuantity.text.toString())
 
-        Database().updateProduct(this, productList, productModel)
+        AppController().updateProduct(this, productList, productModel)
 
     }
 

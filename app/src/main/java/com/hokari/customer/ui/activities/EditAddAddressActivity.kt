@@ -5,67 +5,72 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
-
-import com.hokari.customer.database.Database
+import com.hokari.customer.R
+import com.hokari.customer.database.AppController
+import com.hokari.customer.databinding.ActivityEditAddAddressBinding
 import com.hokari.customer.model.Address
 
 
 class EditAddAddressActivity : UiComponentsActivity() {
 
     private var lastAddressDetails: Address? = null
+    private lateinit var binding: ActivityEditAddAddressBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = ActivityEditAddAddressBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_add_address)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar_add_edit_address_activity)
+        setSupportActionBar(binding.toolbarAddEditAddressActivity)
         val actionBar = supportActionBar
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
         }
 
-        toolbar_add_edit_address_activity.setNavigationOnClickListener {onBackPressed()}
+        binding.toolbarAddEditAddressActivity.setNavigationOnClickListener {onBackPressed()}
 
         if(intent.hasExtra("extra_address_details")){
             lastAddressDetails = intent.getParcelableExtra("extra_address_details")
         }
         if(lastAddressDetails != null){
             if(lastAddressDetails!!.id.isNotEmpty()){
-                tv_title.text = resources.getString(R.string.title_edit_address)
-                btn_submit_address.text = resources.getString(R.string.btn_lbl_update)
+                binding.tvTitle.text = resources.getString(R.string.title_edit_address)
+                binding.btnSubmitAddress.text = resources.getString(R.string.btn_lbl_update)
 
-                et_full_name.setText(lastAddressDetails?.fullName)
-                et_phone_number.setText(lastAddressDetails?.mobileNumber)
-                et_address.setText(lastAddressDetails?.address)
-                et_zip_code.setText(lastAddressDetails?.zipCode)
-                et_additional_note.setText(lastAddressDetails?.additionalNote)
+                binding.etFullName.setText(lastAddressDetails?.fullName)
+                binding.etPhoneNumber.setText(lastAddressDetails?.mobileNumber)
+                binding.etAddress.setText(lastAddressDetails?.address)
+                binding.etZipCode.setText(lastAddressDetails?.zipCode)
+                binding.etAdditionalNote.setText(lastAddressDetails?.additionalNote)
 
                 when (lastAddressDetails?.type) {
                     "Home" -> {
-                        rb_home.isChecked = true
+                        binding.rbHome.isChecked = true
                     }
                     "Office" -> {
-                        rb_office.isChecked = true
+                        binding.rbOffice.isChecked = true
                     }
                     else -> {
-                        rb_other.isChecked = true
-                        til_other_details.visibility = View.VISIBLE
-                        et_other_details.setText(lastAddressDetails?.otherDetails)
+                        binding.apply {
+                            rbOther.isChecked = true
+                            tilOtherDetails.visibility = View.VISIBLE
+                            etOtherDetails.setText(lastAddressDetails?.otherDetails)
+                        }
                     }
                 }
             }
         }
 
-        btn_submit_address.setOnClickListener {
+        binding.btnSubmitAddress.setOnClickListener {
             saveAddressToDatabase()
         }
 
-        rg_type.setOnCheckedChangeListener {_,checkedId ->
+        binding.rgType.setOnCheckedChangeListener {_,checkedId ->
             if(checkedId == R.id.rb_other){
-                til_other_details.visibility = View.VISIBLE
+                binding.tilOtherDetails.visibility = View.VISIBLE
             }else{
-                til_other_details.visibility = View.GONE
+                binding.tilOtherDetails.visibility = View.GONE
             }
         }
 
@@ -75,22 +80,23 @@ class EditAddAddressActivity : UiComponentsActivity() {
 
     private fun saveAddressToDatabase(){
 
-        val fullName: String = et_full_name.text.toString().trim { it <= ' ' }
-        val phoneNumber: String = et_phone_number.text.toString().trim { it <= ' ' }
-        val address: String = et_address.text.toString().trim { it <= ' ' }
-        val zipCode: String = et_zip_code.text.toString().trim { it <= ' ' }
-        val additionalNote: String = et_additional_note.text.toString().trim { it <= ' ' }
-        val otherDetails: String = et_other_details.text.toString().trim { it <= ' ' }
+            val fullName: String = binding.etFullName.text.toString().trim { it <= ' ' }
+            val phoneNumber: String = binding.etPhoneNumber.text.toString().trim { it <= ' ' }
+            val address: String = binding.etAddress.text.toString().trim { it <= ' ' }
+            val zipCode: String = binding.etZipCode.text.toString().trim { it <= ' ' }
+            val additionalNote: String = binding.etAdditionalNote.text.toString().trim { it <= ' ' }
+            val otherDetails: String = binding.etOtherDetails.text.toString().trim { it <= ' ' }
+
 
         if (validateData()) {
 
             showProgressBar(resources.getString(R.string.please_wait))
 
             val addressType: String = when {
-                rb_home.isChecked -> {
+                binding.rbHome.isChecked -> {
                     "Home"
                 }
-                rb_office.isChecked -> {
+                binding.rbOffice.isChecked -> {
                     "Office"
                 }
                 else -> {
@@ -100,7 +106,7 @@ class EditAddAddressActivity : UiComponentsActivity() {
 
 
             val addressModel = Address(
-                Database().getUserID(),
+                AppController().getUserID(),
                 fullName,
                 phoneNumber,
                 address,
@@ -111,9 +117,9 @@ class EditAddAddressActivity : UiComponentsActivity() {
             )
 
             if(lastAddressDetails != null && lastAddressDetails!!.id.isNotEmpty()){
-                Database().updateAddress(this,addressModel,lastAddressDetails!!.id)
+                AppController().updateAddress(this,addressModel,lastAddressDetails!!.id)
             }else{
-                Database().addAddress(this,addressModel)
+                AppController().addAddress(this,addressModel)
             }
 
         }
@@ -143,29 +149,29 @@ class EditAddAddressActivity : UiComponentsActivity() {
     private fun validateData(): Boolean {
         return when {
 
-            TextUtils.isEmpty(et_full_name.text.toString().trim { it <= ' ' }) -> {
+            TextUtils.isEmpty(binding.etFullName.text.toString().trim { it <= ' ' }) -> {
                 Toast.makeText(this, R.string.err_msg_please_enter_full_name, Toast.LENGTH_LONG).show()
                 false
             }
 
-            TextUtils.isEmpty(et_phone_number.text.toString().trim { it <= ' ' }) -> {
+            TextUtils.isEmpty(binding.etPhoneNumber.text.toString().trim { it <= ' ' }) -> {
 
                 Toast.makeText(this, R.string.err_msg_please_enter_phone_number, Toast.LENGTH_LONG).show()
                 false
             }
 
-            TextUtils.isEmpty(et_address.text.toString().trim { it <= ' ' }) -> {
+            TextUtils.isEmpty(binding.etAddress.text.toString().trim { it <= ' ' }) -> {
                 Toast.makeText(this, R.string.err_msg_please_enter_address, Toast.LENGTH_LONG).show()
                 false
             }
 
-            TextUtils.isEmpty(et_zip_code.text.toString().trim { it <= ' ' }) -> {
+            TextUtils.isEmpty(binding.etZipCode.text.toString().trim { it <= ' ' }) -> {
                 Toast.makeText(this, R.string.err_msg_please_enter_zip_code, Toast.LENGTH_LONG).show()
                 false
             }
 
-            rb_other.isChecked && TextUtils.isEmpty(
-                et_zip_code.text.toString().trim { it <= ' ' }) -> {
+            binding.rbOther.isChecked && TextUtils.isEmpty(
+                binding.etZipCode.text.toString().trim { it <= ' ' }) -> {
                 Toast.makeText(this, R.string.err_msg_please_enter_zip_code, Toast.LENGTH_LONG).show()
                 false
             }

@@ -6,7 +6,7 @@ import android.view.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hokari.customer.R
 import com.hokari.customer.adapter.DashboardListAdapter
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.FragmentDashboardBinding
 import com.hokari.customer.model.Product
 import com.hokari.customer.ui.activities.CartListActivity
@@ -71,6 +71,6 @@ class DashboardFragment : UiComponentsFragment() {
 
     private fun getDashboardList() {
         showProgressBar(getString(R.string.please_wait))
-        Database().getItemsForDashboard(this@DashboardFragment)
+        AppController().getItemsForDashboard(this@DashboardFragment)
     }
 }

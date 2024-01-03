@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hokari.customer.R
 
 import com.hokari.customer.adapter.CartItemAdapter
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.ActivityCheckoutBinding
 import com.hokari.customer.model.Address
 import com.hokari.customer.model.Cart
@@ -63,7 +63,7 @@ class CheckoutActivity : UiComponentsActivity() {
         showProgressBar(getString(R.string.please_wait))
         val uuid = UUID.randomUUID()
         orderDetails = Order(
-            Database().getUserID(),
+            AppController().getUserID(),
             lastCartItemList,
             lastAddressDetails!!,
             "Order-$uuid",
@@ -74,14 +74,14 @@ class CheckoutActivity : UiComponentsActivity() {
             System.currentTimeMillis()
 
         )
-        Database().createOrder(this,orderDetails)
+        AppController().createOrder(this,orderDetails)
 
 
     }
 
 
     fun orderCreatedSuccess(){
-        Database().updateProductCartDetails(this,lastCartItemList,orderDetails)
+        AppController().updateProductCartDetails(this,lastCartItemList,orderDetails)
     }
 
     fun cartDetailsUpdatedSuccessfully(){
@@ -95,7 +95,7 @@ class CheckoutActivity : UiComponentsActivity() {
 
     private fun getProductList(){
         showProgressBar(resources.getString(R.string.please_wait))
-        Database().getAllProductsList(this@CheckoutActivity)
+        AppController().getAllProductsList(this@CheckoutActivity)
     }
 
     fun successProductListFromFS(productList: ArrayList<Product>){
@@ -104,7 +104,7 @@ class CheckoutActivity : UiComponentsActivity() {
     }
 
     private fun getCartItemList(){
-        Database().getCartList(this@CheckoutActivity)
+        AppController().getCartList(this@CheckoutActivity)
     }
 
     fun successCartItemList(cartList: ArrayList<Cart>){

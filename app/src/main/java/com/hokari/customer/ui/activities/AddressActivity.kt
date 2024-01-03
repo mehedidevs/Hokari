@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hokari.customer.R
 import com.hokari.customer.adapter.AddressAdapter
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.ActivityAddressBinding
 import com.hokari.customer.model.Address
 import com.hokari.customer.utils.Constants
@@ -91,7 +91,7 @@ class AddressActivity : UiComponentsActivity() {
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                         showProgressBar(getString(R.string.please_wait))
 
-                        Database().deleteAddress(this@AddressActivity,addressList[viewHolder.adapterPosition].id)
+                        AppController().deleteAddress(this@AddressActivity,addressList[viewHolder.adapterPosition].id)
                     }
                 }
 
@@ -107,7 +107,7 @@ class AddressActivity : UiComponentsActivity() {
 
     private fun getAddressList(){
         showProgressBar(getString(R.string.please_wait))
-        Database().getAddresses(this)
+        AppController().getAddresses(this)
     }
 
     fun deleteAddressSuccessful(){

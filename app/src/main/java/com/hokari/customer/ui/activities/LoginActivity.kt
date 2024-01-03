@@ -12,8 +12,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hokari.customer.R
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.ActivityLoginBinding
+import com.hokari.customer.databinding.ProgressBarBinding
 import com.hokari.customer.model.User
 import com.hokari.customer.utils.Constants
 
@@ -77,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(email,password).addOnCompleteListener{ task->
 
                 if(task.isSuccessful){
-                    Database().getCurrentUserDetails(this@LoginActivity)
+                    AppController().getCurrentUserDetails(this@LoginActivity)
                 }
                 else{
                     hideProgressBar()
@@ -95,10 +96,12 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-    private fun showProgressBar() {
+     fun showProgressBar() {
+
         myProgressDialog = Dialog(this)
-        myProgressDialog.setContentView(R.layout.progress_bar)
-//        myProgressDialog.tv_progress_text.setText(R.string.please_wait)
+        val binding: ProgressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+        myProgressDialog.setContentView(binding.root)
+        binding.tvProgressText.setText(R.string.please_wait)
         myProgressDialog.setCancelable(false)
         myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.show()

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hokari.customer.R
 
 import com.hokari.customer.adapter.CartItemAdapter
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.ActivityCartListBinding
 import com.hokari.customer.model.Cart
 import com.hokari.customer.model.Product
@@ -114,7 +114,7 @@ class CartListActivity : UiComponentsActivity() {
 
     private fun getCartItemsList(){
         //showProgressBar(getString(R.string.please_wait))
-        Database().getCartList(this@CartListActivity)
+        AppController().getCartList(this@CartListActivity)
 
     }
 
@@ -140,7 +140,7 @@ class CartListActivity : UiComponentsActivity() {
 
     private fun getProductsFromFB(){
         showProgressBar(getString(R.string.please_wait))
-        Database().getAllProductsList(this)
+        AppController().getAllProductsList(this)
 
     }
 

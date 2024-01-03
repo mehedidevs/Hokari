@@ -6,7 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hokari.customer.R
 import com.hokari.customer.adapter.SoldProductAdapter
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.ActivitySoldProductsBinding
 import com.hokari.customer.model.SoldProduct
 
@@ -28,7 +28,7 @@ class SoldProductsActivity : UiComponentsActivity() {
 
     private fun getSoldProductList(){
         showProgressBar(getString(R.string.please_wait))
-        Database().getSoldProductsList(this)
+        AppController().getSoldProductsList(this)
     }
 
     fun successSoldProductList(soldProductList: ArrayList<SoldProduct>){

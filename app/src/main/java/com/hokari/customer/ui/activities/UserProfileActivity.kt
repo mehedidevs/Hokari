@@ -26,7 +26,7 @@ import com.hokari.customer.R
 
 class UserProfileActivity : AppCompatActivity() {
     private lateinit var myUserDetails : User
-    private lateinit var binding : ActivityUserProfileBinding
+    lateinit var binding : ActivityUserProfileBinding
     private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     var selectedPicture: Uri? = null

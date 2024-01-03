@@ -6,7 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hokari.customer.R
 import com.hokari.customer.adapter.ProductsListAdapter
-import com.hokari.customer.database.Database
+import com.hokari.customer.database.AppController
 import com.hokari.customer.model.Product
 import com.hokari.customer.ui.activities.AddProductActivity
 import com.hokari.customer.ui.activities.SoldProductsActivity
@@ -62,7 +62,7 @@ class ProductFragment : UiComponentsFragment() {
     }
     fun getProductList() {
         showProgressBar(resources.getString(R.string.please_wait))
-        Database().getProductList(this)
+        AppController().getProductList(this)
     }
     fun deleteProduct(productId: String) {
         val builder = AlertDialog.Builder(requireActivity())
@@ -71,7 +71,7 @@ class ProductFragment : UiComponentsFragment() {
         builder.setIcon(R.drawable.ic_baseline_warning_24)
         builder.setPositiveButton(getString(R.string.yes)) { d, _ ->
             showProgressBar(getString(R.string.please_wait))
-            Database().deleteProduct(this, productId)
+            AppController().deleteProduct(this, productId)
             d.dismiss()
         }
         builder.setNegativeButton(getString(R.string.no)) { d, _ ->
