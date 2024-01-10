@@ -49,14 +49,16 @@
         android:id="@+id/rv_address_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        tools:listitem="@layout/address_row"
         android:layout_marginTop="@dimen/rv_address_list_marginTop"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_add_address" />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_no_address_found"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

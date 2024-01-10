@@ -46,12 +46,12 @@ open class AddressAdapter(
     override fun onBindViewHolder(holder: AddressViewHolder, position: Int) {
         val model = addressList[position]
 
-
-        holder.binding.tvAddressFullName.text = model.fullName
-        holder.binding.tvAddressDetails.text = "${model.address}, ${model.zipCode}"
-        holder.binding.tvAddressMobileNumber.text = model.mobileNumber
-        holder.binding.tvAddressType.text = model.type
-
+        holder.binding.apply {
+            tvAddressFullName.text = model.fullName
+            tvAddressDetails.text = "${model.address}, ${model.zipCode}"
+            tvAddressMobileNumber.text = model.mobileNumber
+            tvAddressType.text = model.type
+        }
 
         if (selectAddress) {
             holder.itemView.setOnClickListener {

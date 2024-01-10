@@ -15,7 +15,7 @@ import com.hokari.customer.R
 
 class SettingsActivity : UiComponentsActivity() {
 
-    private lateinit var myUserDetails : User
+    private lateinit var myUserDetails: User
     lateinit var binding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +24,7 @@ class SettingsActivity : UiComponentsActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbarSettingsActivity)
         val actionBar = supportActionBar
-        if(actionBar!=null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
         }
@@ -48,34 +48,34 @@ class SettingsActivity : UiComponentsActivity() {
         binding.tvEdit.setOnClickListener {
 
             val intent = Intent(this@SettingsActivity, UserProfileActivity::class.java)
-            intent.putExtra("fromSettings",1) //inform userprofile that we are coming from settings.
-            intent.putExtra(Constants.EXTRA_USER_DETAILS,myUserDetails)
+            intent.putExtra(
+                "fromSettings",
+                1
+            ) //inform userprofile that we are coming from settings.
+            intent.putExtra(Constants.EXTRA_USER_DETAILS, myUserDetails)
             startActivity(intent)
         }
 
-        binding.llAddress.setOnClickListener{
+        binding.llAddress.setOnClickListener {
             val intent = Intent(this, AddressActivity::class.java)
             startActivity(intent)
         }
 
 
-
     }
 
 
-
-
-    private fun getUserDetails(){
+    private fun getUserDetails() {
         showProgressBar(resources.getString(R.string.please_wait))
         Database().getCurrentUserDetails(this)
 
 
     }
 
-    fun userDetailsSuccess(user: User){
+    fun userDetailsSuccess(user: User) {
         myUserDetails = user
         hideProgressBar()
-        LoadGlide(this@SettingsActivity).loadUserPicture(user.image,binding.ivUserPhoto)
+        LoadGlide(this@SettingsActivity).loadUserPicture(user.image, binding.ivUserPhoto)
 
         binding.apply {
             tvName.text = "${user.firstName} ${user.lastName}"

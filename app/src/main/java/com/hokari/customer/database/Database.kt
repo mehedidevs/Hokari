@@ -60,18 +60,21 @@ class Database {
             }
     }
 
-    fun getUserID() : String{
+    fun getUserID(): String {
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         var currentUserID = ""
-        if(currentUser != null){
+        if (currentUser != null) {
             currentUserID = currentUser.uid
         }
         return currentUserID
 
     }
 
-    fun getCurrentUserDetails(activity:Activity){
+    fun getCurrentUserDetails(
+        activity: Activity,
+        userProfileBinding: ActivityUserProfileBinding? = null
+    ) {
 
         db.collection("users")
             .document(getUserID())
@@ -81,9 +84,10 @@ class Database {
                 val user = document.toObject(User::class.java)
 
                 //Save Name and Surname to SP.
-                val sharedPreferences = activity.getSharedPreferences(Constants.SHOP_PREFERENCES,Context.MODE_PRIVATE)
+                val sharedPreferences =
+                    activity.getSharedPreferences(Constants.SHOP_PREFERENCES, Context.MODE_PRIVATE)
                 sharedPreferences.edit().putString(Constants.CURRENT_NAME, user!!.firstName).apply()
-                sharedPreferences.edit().putString(Constants.CURRENT_SURNAME,user.lastName).apply()
+                sharedPreferences.edit().putString(Constants.CURRENT_SURNAME, user.lastName).apply()
 
 
                 when (activity) {
@@ -91,14 +95,17 @@ class Database {
                         activity.userLoggedInSuccess(user)
                     }
                 }
-                when(activity){
+                when (activity) {
                     is UserProfileActivity -> {
-                        activity.et_email.setText(user.email)
-                        activity.et_first_name.setText(user.firstName)
-                        activity.et_last_name.setText(user.lastName)
+                        userProfileBinding?.apply {
+                            etEmail.setText(user.email)
+                            etFirstName.setText(user.firstName)
+                            etLastName.setText(user.lastName)
+                        }
+
                     }
 
-                    is SettingsActivity ->{
+                    is SettingsActivity -> {
                         activity.userDetailsSuccess(user)
                     }
 
@@ -108,24 +115,24 @@ class Database {
 
     }
 
-    fun updateProfileDetails(activity: Activity,userDetailsHashmap : HashMap<String,Any>){
+    fun updateProfileDetails(activity: Activity, userDetailsHashmap: HashMap<String, Any>) {
 
         db.collection("users").document(getUserID())
             .update(userDetailsHashmap)
             .addOnSuccessListener {
-                when(activity){
-                    is UserProfileActivity ->{
+                when (activity) {
+                    is UserProfileActivity -> {
                         activity.userDetailsUpdateSuccess()
                     }
                 }
             }
             .addOnFailureListener {
-                when(activity){
-                    is UserProfileActivity ->{
+                when (activity) {
+                    is UserProfileActivity -> {
                         activity.hideProgressBar()
                     }
 
-                    is SettingsActivity ->{
+                    is SettingsActivity -> {
                         activity.hideProgressBar()
                     }
 
@@ -134,14 +141,11 @@ class Database {
             }
 
 
-
-
-
     }
 
-    fun uploadImageToStorage(activity: Activity, imageUri : Uri, imageType: String){
-        val storage : StorageReference = FirebaseStorage.getInstance().reference.child(
-            imageType + System.currentTimeMillis()+"."+
+    fun uploadImageToStorage(activity: Activity, imageUri: Uri, imageType: String) {
+        val storage: StorageReference = FirebaseStorage.getInstance().reference.child(
+            imageType + System.currentTimeMillis() + "." +
                     Constants.getFileExt(
                         activity, imageUri
                     )
@@ -163,6 +167,7 @@ class Database {
                             is UserProfileActivity -> {
                                 activity.imageUploadSuccess(uri.toString())
                             }
+
                             is AddProductActivity -> {
                                 activity.imageUploadSuccess(uri.toString())
                             }
@@ -176,6 +181,7 @@ class Database {
                     is UserProfileActivity -> {
                         activity.hideProgressBar()
                     }
+
                     is AddProductActivity -> {
                         activity.hideProgressBar()
                     }
@@ -192,36 +198,36 @@ class Database {
     }
 
 
-    fun uploadProductDetails(activity: AddProductActivity, productInfo: Product){
+    fun uploadProductDetails(activity: AddProductActivity, productInfo: Product) {
 
         db.collection("products")
             .document()
-            .set(productInfo,SetOptions.merge())
+            .set(productInfo, SetOptions.merge())
             .addOnSuccessListener {
                 activity.productUploadSuccess()
             }
             .addOnFailureListener {
                 activity.hideProgressBar()
-                Toast.makeText(activity,"Error!",Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "Error!", Toast.LENGTH_LONG).show()
             }
 
 
     }
 
-    fun getProductList(fragment: Fragment){
+    fun getProductList(fragment: Fragment) {
         db.collection("products")
-            .whereEqualTo("user_id",getUserID())
+            .whereEqualTo("user_id", getUserID())
             .get()
-            .addOnSuccessListener { document->
-                val productList : ArrayList<Product> = ArrayList()
-                for(p in document.documents){
+            .addOnSuccessListener { document ->
+                val productList: ArrayList<Product> = ArrayList()
+                for (p in document.documents) {
                     val product = p.toObject(Product::class.java)
                     product!!.product_id = p.id
                     productList.add(product)
                 }
 
-                when(fragment){
-                    is ProductFragment ->{
+                when (fragment) {
+                    is ProductFragment -> {
                         fragment.successProductListFS(productList)
                     }
                 }
@@ -229,13 +235,13 @@ class Database {
 
     }
 
-    fun getItemsForDashboard(fragment: DashboardFragment){
+    fun getItemsForDashboard(fragment: DashboardFragment) {
         db.collection("products")
             .get()
             .addOnSuccessListener { document ->
                 println(document.documents.toString())
-                val productList : ArrayList<Product> = ArrayList()
-                for(p in document.documents){
+                val productList: ArrayList<Product> = ArrayList()
+                for (p in document.documents) {
                     val product = p.toObject(Product::class.java)
                     product!!.product_id = p.id
                     productList.add(product)
@@ -248,7 +254,7 @@ class Database {
             }
     }
 
-    fun deleteProduct(fragment: ProductFragment, productId: String){
+    fun deleteProduct(fragment: ProductFragment, productId: String) {
         db.collection("products")
             .document(productId)
             .delete()
@@ -264,11 +270,11 @@ class Database {
 
     }
 
-    fun getProductDetails(activity: ProductDetailsActivity, productId: String){
+    fun getProductDetails(activity: ProductDetailsActivity, productId: String) {
         db.collection("products")
             .document(productId)
             .get()
-            .addOnSuccessListener {document->
+            .addOnSuccessListener { document ->
                 val product = document.toObject(Product::class.java)
                 activity.productDetailsSuccess(product!!)
 
@@ -281,7 +287,11 @@ class Database {
 
     }
 
-    fun updateProduct(activity: AddProductActivity, productList: HashMap<String,Any>, product: Product){
+    fun updateProduct(
+        activity: AddProductActivity,
+        productList: HashMap<String, Any>,
+        product: Product
+    ) {
         db.collection("products").document(product.product_id)
             .update(productList)
             .addOnSuccessListener {
@@ -289,13 +299,13 @@ class Database {
             }
             .addOnFailureListener {
                 activity.hideProgressBar()
-                println("Failed to update product."+it.toString())
+                println("Failed to update product." + it.toString())
             }
 
     }
 
 
-    fun addItemToCart(activity: ProductDetailsActivity, addToCart: Cart){
+    fun addItemToCart(activity: ProductDetailsActivity, addToCart: Cart) {
 
         db.collection("cart_items")
             .document()
@@ -310,17 +320,16 @@ class Database {
 
     }
 
-    fun checkIfItemExistsInCart(activity: ProductDetailsActivity, productId: String){
+    fun checkIfItemExistsInCart(activity: ProductDetailsActivity, productId: String) {
 
         db.collection("cart_items")
-            .whereEqualTo("user_id",getUserID())
-            .whereEqualTo("product_id",productId)
+            .whereEqualTo("user_id", getUserID())
+            .whereEqualTo("product_id", productId)
             .get()
-            .addOnSuccessListener { document->
-                if(document.documents.size>0){
+            .addOnSuccessListener { document ->
+                if (document.documents.size > 0) {
                     activity.productExistsInCard()
-                }
-                else{
+                } else {
                     activity.hideProgressBar()
                 }
 
@@ -330,10 +339,9 @@ class Database {
             }
 
 
-
     }
 
-    fun getAllProductsList(activity: Activity){
+    fun getAllProductsList(activity: Activity) {
         db.collection("products")
             .get()
             .addOnSuccessListener { document ->
@@ -351,7 +359,6 @@ class Database {
                     is CartListActivity -> {
                         activity.successProductListFromFS(productsList)
                     }
-
 
 
                     is CheckoutActivity -> {
@@ -376,33 +383,34 @@ class Database {
     }
 
 
-
-    fun getCartList(activity: Activity){
+    fun getCartList(activity: Activity) {
         db.collection("cart_items")
-            .whereEqualTo("user_id",getUserID())
+            .whereEqualTo("user_id", getUserID())
             .get()
-            .addOnSuccessListener {document->
+            .addOnSuccessListener { document ->
                 val list: ArrayList<Cart> = ArrayList()
-                for (cart in document.documents){
+                for (cart in document.documents) {
                     val cartItem = cart.toObject(Cart::class.java)
                     cartItem!!.id = cart.id
                     list.add(cartItem)
                 }
 
-                when(activity){
-                    is CartListActivity ->{
+                when (activity) {
+                    is CartListActivity -> {
                         activity.successCartItemList(list)
                     }
-                    is CheckoutActivity ->{
+
+                    is CheckoutActivity -> {
                         activity.successCartItemList(list)
                     }
                 }
             }.addOnFailureListener {
-                when(activity){
-                    is CartListActivity ->{
+                when (activity) {
+                    is CartListActivity -> {
                         activity.hideProgressBar()
                     }
-                    is CheckoutActivity ->{
+
+                    is CheckoutActivity -> {
                         activity.hideProgressBar()
                     }
                 }
@@ -412,51 +420,53 @@ class Database {
     }
 
 
-    fun updateCartList(context: Context,cartId: String,itemHashMap: HashMap<String,Any>){
+    fun updateCartList(context: Context, cartId: String, itemHashMap: HashMap<String, Any>) {
         db.collection("cart_items")
             .document(cartId)
             .update(itemHashMap)
             .addOnSuccessListener {
-                when(context){
-                    is CartListActivity ->{
+                when (context) {
+                    is CartListActivity -> {
                         context.itemUpdateSuccess()
                     }
                 }
 
 
             }
-            .addOnFailureListener { when(context){
-                is CartListActivity ->{
-                    context.hideProgressBar()
+            .addOnFailureListener {
+                when (context) {
+                    is CartListActivity -> {
+                        context.hideProgressBar()
+                    }
                 }
-            } }
+            }
 
     }
 
-   fun removeItemInCart(context: Context,cartId: String){
-       db.collection("cart_items")
-           .document(cartId)
-           .delete()
-           .addOnSuccessListener {
-               when(context){
-                   is CartListActivity ->{
-                       context.itemRemovedSuccess()
-                   }
-               }
+    fun removeItemInCart(context: Context, cartId: String) {
+        db.collection("cart_items")
+            .document(cartId)
+            .delete()
+            .addOnSuccessListener {
+                when (context) {
+                    is CartListActivity -> {
+                        context.itemRemovedSuccess()
+                    }
+                }
 
 
-           }.addOnFailureListener {
-               when(context){
-                   is CartListActivity ->{
-                       context.hideProgressBar()
-                       println("Error while removing cart Item.")
-                   }
-               }
-           }
-   }
+            }.addOnFailureListener {
+                when (context) {
+                    is CartListActivity -> {
+                        context.hideProgressBar()
+                        println("Error while removing cart Item.")
+                    }
+                }
+            }
+    }
 
 
-    fun addAddress(activity: EditAddAddressActivity, addressInfo: Address){
+    fun addAddress(activity: EditAddAddressActivity, addressInfo: Address) {
 
         db.collection("addresses")
             .document()
@@ -468,15 +478,16 @@ class Database {
             }
     }
 
-    fun getAddresses(activity: AddressActivity){
+    fun getAddresses(activity: AddressActivity) {
         db.collection("addresses")
-            .whereEqualTo("userId",getUserID())
+            .whereEqualTo("userId", getUserID())
             .get()
-            .addOnSuccessListener {document->
-                val addressList : ArrayList<Address> = ArrayList()
-                for(i in document.documents){
+            .addOnSuccessListener { document ->
+                val addressList: ArrayList<Address> = ArrayList()
+                for (i in document.documents) {
                     val address = i.toObject(Address::class.java)
-                    address!!.id = i.id //burada her adress diye bir adres objesi oluşturup bu objeye id veriyoruz. Bu id (i.id) belgemizin ismi. Yani random bir id.
+                    address!!.id =
+                        i.id //burada her adress diye bir adres objesi oluşturup bu objeye id veriyoruz. Bu id (i.id) belgemizin ismi. Yani random bir id.
                     addressList.add(address)
                 }
                 activity.addressListFromDBSuccess(addressList)
@@ -509,7 +520,7 @@ class Database {
             }
     }
 
-    fun deleteAddress(activity: AddressActivity, addressId: String){
+    fun deleteAddress(activity: AddressActivity, addressId: String) {
         db.collection("addresses")
             .document(addressId)
             .delete()
@@ -522,7 +533,7 @@ class Database {
     }
 
 
-    fun createOrder(activity: CheckoutActivity, order: Order){
+    fun createOrder(activity: CheckoutActivity, order: Order) {
         db.collection("orders")
             .document()
             .set(order, SetOptions.merge())
@@ -534,7 +545,11 @@ class Database {
             }
     }
 
-    fun updateProductCartDetails(activity: CheckoutActivity, cartList: ArrayList<Cart>, order: Order){
+    fun updateProductCartDetails(
+        activity: CheckoutActivity,
+        cartList: ArrayList<Cart>,
+        order: Order
+    ) {
         val write = db.batch()
 
         for (cart in cartList) {
@@ -576,13 +591,13 @@ class Database {
 
     }
 
-    fun getOrderList(fragment: OrdersFragment){
+    fun getOrderList(fragment: OrdersFragment) {
         db.collection("orders")
-            .whereEqualTo("user_id",getUserID())
+            .whereEqualTo("user_id", getUserID())
             .get()
-            .addOnSuccessListener { document->
+            .addOnSuccessListener { document ->
                 val list: ArrayList<Order> = ArrayList()
-                for(i in document.documents){
+                for (i in document.documents) {
                     val orderItem = i.toObject(Order::class.java)
                     orderItem!!.id = i.id
                     list.add(orderItem)
@@ -596,13 +611,13 @@ class Database {
 
     }
 
-    fun getSoldProductsList(activity: SoldProductsActivity){
+    fun getSoldProductsList(activity: SoldProductsActivity) {
         db.collection("sold_products")
-            .whereEqualTo("user_id",getUserID())
+            .whereEqualTo("user_id", getUserID())
             .get()
-            .addOnSuccessListener {document->
+            .addOnSuccessListener { document ->
                 val list: ArrayList<SoldProduct> = ArrayList()
-                for(i in document.documents){
+                for (i in document.documents) {
                     val soldProduct = i.toObject(SoldProduct::class.java)!!
                     soldProduct.id = i.id
                     list.add(soldProduct)
@@ -616,12 +631,6 @@ class Database {
                 activity.hideProgressBar()
             }
     }
-
-
-
-
-
-
 
 
 }
