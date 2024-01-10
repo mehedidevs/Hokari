@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.hokari.customer.R
 import com.hokari.customer.databinding.FragmentUiComponentsBinding
 import com.hokari.customer.databinding.ProgressBarBinding
+import org.checkerframework.common.returnsreceiver.qual.This
 
 open class UiComponentsFragment : Fragment() {
     private lateinit var myProgressDialog : Dialog
@@ -24,6 +25,7 @@ open class UiComponentsFragment : Fragment() {
     }
     fun showProgressBar(string: String) {
         myProgressDialog = Dialog(this)
+//                TODO: Fix This
         val binding: ProgressBarBinding = ProgressBarBinding.inflate(layoutInflater)
         myProgressDialog.setContentView(binding.root)
         binding.tvProgressText.setText(R.string.please_wait)
@@ -31,6 +33,10 @@ open class UiComponentsFragment : Fragment() {
         myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.show()
         }
+
+
+
+
     fun hideProgressBar() {
         myProgressDialog.dismiss()
     }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.hokari.customer.R
 import com.hokari.customer.databinding.ActivityUiComponentsBinding
+import com.hokari.customer.databinding.ProgressBarBinding
 
 
 //This activity is for gathering common features that app uses in different activities.
@@ -12,7 +13,7 @@ import com.hokari.customer.databinding.ActivityUiComponentsBinding
 
 open class UiComponentsActivity : AppCompatActivity() {
 
-    private lateinit var myProgressDialog: Dialog
+    lateinit var myProgressDialog: Dialog
     private lateinit var binding: ActivityUiComponentsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,12 +25,13 @@ open class UiComponentsActivity : AppCompatActivity() {
 
     fun showProgressBar(text: String) {
         myProgressDialog = Dialog(this)
-        myProgressDialog.setContentView(R.layout.dialog_progress)
-//        myProgressDialog.tv_progress_text.setText(R.string.please_wait)
-//        TODO: Fix This
+        val binding: ProgressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+        myProgressDialog.setContentView(binding.root)
+        binding.tvProgressText.setText(R.string.please_wait)
         myProgressDialog.setCancelable(false)
         myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.show()
+    }
     }
 
     fun hideProgressBar() {

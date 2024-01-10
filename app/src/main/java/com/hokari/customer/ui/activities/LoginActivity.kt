@@ -97,7 +97,6 @@ class LoginActivity : AppCompatActivity() {
 
 
      fun showProgressBar() {
-
         myProgressDialog = Dialog(this)
         val binding: ProgressBarBinding = ProgressBarBinding.inflate(layoutInflater)
         myProgressDialog.setContentView(binding.root)

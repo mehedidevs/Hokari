@@ -16,6 +16,7 @@ import com.hokari.customer.R
 
 import com.hokari.customer.database.AppController
 import com.hokari.customer.databinding.ActivityRegisterBinding
+import com.hokari.customer.databinding.ProgressBarBinding
 import com.hokari.customer.model.User
 
 
@@ -28,8 +29,7 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
 
         @Suppress("DEPRECATION")
@@ -161,21 +161,16 @@ class RegisterActivity : AppCompatActivity() {
 
     fun showProgressBar() {
         myProgressDialog = Dialog(this)
-        myProgressDialog.setContentView(R.layout.progress_bar)
-        myProgressDialog.setCanceledOnTouchOutside(false)
+        val binding: ProgressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+        myProgressDialog.setContentView(binding.root)
+        binding.tvProgressText.setText(R.string.please_wait)
         myProgressDialog.setCancelable(false)
-//        myProgressDialog.tv_progress_text.setText(R.string.please_wait)
-//        TODO: Fix This
+        myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.show()
     }
-
     fun hideProgressBar() {
         myProgressDialog.dismiss()
     }
-
-
-
-
 
 }
 

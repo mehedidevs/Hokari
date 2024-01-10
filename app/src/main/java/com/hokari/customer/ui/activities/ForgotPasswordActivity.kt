@@ -9,6 +9,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hokari.customer.R
 import com.hokari.customer.databinding.ActivityForgotPasswordBinding
+import com.hokari.customer.databinding.ProgressBarBinding
 
 
 class ForgotPasswordActivity : AppCompatActivity() {
@@ -63,11 +64,11 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
     private fun showProgressBar() {
         myProgressDialog = Dialog(this)
-        myProgressDialog.setContentView(R.layout.progress_bar)
-        myProgressDialog.setCanceledOnTouchOutside(false)
+        val binding: ProgressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+        myProgressDialog.setContentView(binding.root)
+        binding.tvProgressText.setText(R.string.please_wait)
         myProgressDialog.setCancelable(false)
-//        myProgressDialog.tv_progress_text.setText(R.string.please_wait)
-//        TODO: Fix This
+        myProgressDialog.setCanceledOnTouchOutside(false)
         myProgressDialog.show()
     }
 
