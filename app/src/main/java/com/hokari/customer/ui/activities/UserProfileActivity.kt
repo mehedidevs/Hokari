@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.hokari.customer.R
 
 import com.hokari.customer.database.Database
@@ -33,7 +34,8 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     var selectedPicture: Uri? = null
     var userProfileImageURL : String = ""
-
+    lateinit var myProgressDialog: Dialog
+    private lateinit var auth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserProfileBinding.inflate(layoutInflater)

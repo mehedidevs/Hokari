@@ -19,19 +19,28 @@ import com.hokari.customer.databinding.ProgressBarBinding
 import com.hokari.customer.model.User
 import com.hokari.customer.utils.Constants
 
-lateinit var myProgressDialog: Dialog
-private lateinit var auth : FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
+
+    lateinit var myProgressDialog: Dialog
+    private lateinit var auth : FirebaseAuth
     lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_login)
+        setContentView(binding.root)
 
         binding.btnLogin.setOnClickListener {
             loginUser()
         }
+
+        binding.tvRegister.setOnClickListener {
+            Toast.makeText(this, "Clicked", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+
 
         auth = Firebase.auth
         val currentUser = auth.currentUser
@@ -57,11 +66,6 @@ class LoginActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
-        }
-
-        binding.tvRegister .setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
         }
 
 

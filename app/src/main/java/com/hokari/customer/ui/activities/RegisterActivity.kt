@@ -34,8 +34,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(view)
 
 
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        @Suppress("DEPRECATION") if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
             window.setFlags(
@@ -52,14 +51,15 @@ class RegisterActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbarRegisterActivity)
         val actionBar = supportActionBar
-        if(actionBar!=null){
+        if (actionBar != null) {
 
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_new_24)
 
 
         }
-        binding.toolbarRegisterActivity.setNavigationOnClickListener {
+        binding.toolbarRegisterActivity.setOnClickListener {
+            Toast.makeText(this, "Clicked", Toast.LENGTH_LONG).show()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
@@ -69,6 +69,8 @@ class RegisterActivity : AppCompatActivity() {
 
 
         binding.tvLogin.setOnClickListener {
+            Toast.makeText(this, "Clicked", Toast.LENGTH_LONG).show()
+
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
@@ -80,72 +82,93 @@ class RegisterActivity : AppCompatActivity() {
     private fun checkRegisterDetails(): Boolean {
         return when {
             TextUtils.isEmpty(binding.etFirstName.text.toString().trim { it <= ' ' }) -> {
-                Toast.makeText(this,resources.getString(R.string.err_msg_enter_first_name),Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this, resources.getString(R.string.err_msg_enter_first_name), Toast.LENGTH_LONG
+                ).show()
                 false
             }
 
             TextUtils.isEmpty(binding.etLastName.text.toString().trim { it <= ' ' }) -> {
-                Toast.makeText(this,resources.getString(R.string.err_msg_enter_last_name),Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this, resources.getString(R.string.err_msg_enter_last_name), Toast.LENGTH_LONG
+                ).show()
                 false
             }
 
             TextUtils.isEmpty(binding.etEmail.text.toString().trim { it <= ' ' }) -> {
-                Toast.makeText(this,resources.getString(R.string.err_msg_enter_email),Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this, resources.getString(R.string.err_msg_enter_email), Toast.LENGTH_LONG
+                ).show()
                 false
             }
 
             TextUtils.isEmpty(binding.etPassword.text.toString().trim { it <= ' ' }) -> {
-                Toast.makeText(this,resources.getString(R.string.err_msg_enter_password),Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this, resources.getString(R.string.err_msg_enter_password), Toast.LENGTH_LONG
+                ).show()
                 false
             }
 
             TextUtils.isEmpty(binding.etConfirmPassword.text.toString().trim { it <= ' ' }) -> {
-                Toast.makeText(this,resources.getString(R.string.err_msg_enter_confirm_password),Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.err_msg_enter_confirm_password),
+                    Toast.LENGTH_LONG
+                ).show()
                 false
             }
 
-            binding.etPassword.text.toString().trim { it <= ' ' } != binding.etConfirmPassword.text.toString()
+            binding.etPassword.text.toString()
+                .trim { it <= ' ' } != binding.etConfirmPassword.text.toString()
                 .trim { it <= ' ' } -> {
-                Toast.makeText(this,resources.getString(R.string.err_msg_password_and_confirm_password_mismatch),Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.err_msg_password_and_confirm_password_mismatch),
+                    Toast.LENGTH_LONG
+                ).show()
                 false
             }
+
             !binding.cbTermsAndCondition.isChecked -> {
-                Toast.makeText(this,resources.getString(R.string.err_msg_agree_terms_and_conditions),Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.err_msg_agree_terms_and_conditions),
+                    Toast.LENGTH_LONG
+                ).show()
                 false
             }
+
             else -> {
                 true
             }
         }
     }
 
-    private fun registerUser(){
+    private fun registerUser() {
 
-        if(checkRegisterDetails()){
+        if (checkRegisterDetails()) {
             showProgressBar()
-            val email : String = binding.etEmail.text.toString().trim{it<= ' '}
-            val password : String = binding.etPassword.text.toString().trim{it<= ' '}
+            val email: String = binding.etEmail.text.toString().trim { it <= ' ' }
+            val password: String = binding.etPassword.text.toString().trim { it <= ' ' }
 
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
-                .addOnCompleteListener {task->
-                    if(task.isSuccessful){
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
                         val currentUser = Firebase.auth.currentUser
                         val firstName = binding.etFirstName.text.toString()
                         val lastName = binding.etLastName.text.toString()
                         val email = binding.etEmail.text.toString()
 
-                        val user = User(currentUser!!.uid,firstName,lastName,email)
+                        val user = User(currentUser!!.uid, firstName, lastName, email)
                         Database().registerUser(this@RegisterActivity, user)
 
 
-                    }else{
+                    } else {
                         hideProgressBar()
-                        Toast.makeText(this,"Registration failed.",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Registration failed.", Toast.LENGTH_LONG).show()
                     }
 
                 }
-
-
 
 
         }
@@ -175,9 +198,6 @@ class RegisterActivity : AppCompatActivity() {
     fun hideProgressBar() {
         myProgressDialog.dismiss()
     }
-
-
-
 
 
 }

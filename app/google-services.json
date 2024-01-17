@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "442947139733",
-    "project_id": "hokari-df45b",
-    "storage_bucket": "hokari-df45b.appspot.com"
+    "project_number": "51893710976",
+    "project_id": "hokair-93ffd",
+    "storage_bucket": "hokair-93ffd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:442947139733:android:b0ddd3f7b12ac091eec39c",
+        "mobilesdk_app_id": "1:51893710976:android:0cceb691901664d924f665",
         "android_client_info": {
           "package_name": "com.hokari.customer"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDZ1P5IubZgqKGk_iuTyYCZQvRdd1iL4DQ"
+          "current_key": "AIzaSyAQe-sBYa5mWSczz3ju0lMoRyGoDBt1_Qc"
         }
       ],
       "services": {
