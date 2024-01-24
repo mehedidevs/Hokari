@@ -3,6 +3,7 @@ package com.hokari.customer.adapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -60,6 +61,7 @@ open class AddressAdapter(
                 Toast.makeText(context, selectAddressString, Toast.LENGTH_LONG).show()
                 val intent = Intent(context, CheckoutActivity::class.java)
                 intent.putExtra("extra_selected_address", model)
+                intent.flags=FLAG_ACTIVITY_NEW_TASK
                 context.startActivity(intent)
             }
 

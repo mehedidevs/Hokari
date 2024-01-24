@@ -159,19 +159,25 @@ class AddProductActivity : UiComponentsActivity() {
 
         permissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
-                if (result) {
-                    //permission granted
-                    val intentToGallery =
-                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                    activityResultLauncher.launch(intentToGallery)
-                } else {
-                    //permission denied
-                    Toast.makeText(
-                        this@AddProductActivity,
-                        getString(R.string.permission_needed),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+
+                //permission granted
+                val intentToGallery =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                activityResultLauncher.launch(intentToGallery)
+
+//                if (result) {
+//                    //permission granted
+//                    val intentToGallery =
+//                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//                    activityResultLauncher.launch(intentToGallery)
+//                } else {
+//                    //permission denied
+//                    Toast.makeText(
+//                        this@AddProductActivity,
+//                        getString(R.string.permission_needed),
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
             }
     }
 
@@ -272,6 +278,7 @@ class AddProductActivity : UiComponentsActivity() {
             getString(R.string.product_uploaded_success_message),
             Toast.LENGTH_LONG
         ).show()
+        startActivity(Intent(this, DashboardActivity::class.java))
         finish()
 
     }

@@ -49,8 +49,7 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
         }
 
         if(Database().getUserID() == productOwnerId){
-            binding.btnAddToCart.visibility = View.GONE
-            binding.btnGoToCart.visibility = View.GONE
+
 
         }
         else{
@@ -106,7 +105,7 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
         if(product.stock_quantity.toInt() == 0){
             hideProgressBar()
             binding.apply {
-                btnAddToCart.visibility = View.GONE
+
                 tvProductDetailsAvailableQuantity.text = getString(R.string.lbl_out_of_stock)
                 tvProductDetailsAvailableQuantity.setTextColor(ContextCompat.getColor(this@ProductDetailsActivity,
                     R.color.colorSnackBarError
@@ -128,8 +127,7 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
 
     fun productExistsInCard(){
         hideProgressBar()
-        binding.btnAddToCart.visibility = View.GONE
-        binding.btnGoToCart.visibility = View.VISIBLE
+
     }
 
 
@@ -180,8 +178,7 @@ class ProductDetailsActivity : UiComponentsActivity(),View.OnClickListener {
     fun addToCartSuccess(){
         hideProgressBar()
         Toast.makeText(this,getString(R.string.add_to_cart_success),Toast.LENGTH_LONG).show()
-        binding.btnAddToCart.visibility = View.GONE
-        binding.btnGoToCart.visibility = View.VISIBLE
+
     }
 
 
